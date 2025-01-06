@@ -2,20 +2,36 @@ package Prism.Erp.service.impl;
 
 import Prism.Erp.dto.InventoryTransactionDTO;
 import Prism.Erp.entity.InventoryTransaction;
+import Prism.Erp.entity.Product;
+import Prism.Erp.model.TransactionType;
+import Prism.Erp.repository.InventoryTransactionRepository;
 import Prism.Erp.repository.ProductRepository;
-import Prism.Erp.service.AbstractCrudService;
+import Prism.Erp.service.InventoryService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
-public class InventoryServiceImpl extends AbstractCrudService<InventoryTransaction, InventoryTransactionDTO> {
+public class InventoryServiceImpl implements InventoryService {
+
+    private final InventoryTransactionRepository inventoryTransactionRepository;
     private final ProductRepository productRepository;
 
     @Override
-    protected InventoryTransactionDTO toDTO(InventoryTransaction entity) {
+    public InventoryTransactionDTO createTransaction(InventoryTransactionDTO transactionDTO) {
+        InventoryTransaction transaction = convertToEntity(transactionDTO);
+        return convertToDTO(inventoryTransactionRepository.save(transaction));
+    }
+
+    // Implemente os métodos getStockLevels e getLowStockProducts
+    // ... (Implementação dos métodos getStockLevels e getLowStockProducts usando consultas personalizadas ou outras lógicas)
+
+    private InventoryTransactionDTO convertToDTO(InventoryTransaction entity) {
         return InventoryTransactionDTO.builder()
                 .id(entity.getId())
                 .productId(entity.getProduct().getId())
@@ -27,8 +43,16 @@ public class InventoryServiceImpl extends AbstractCrudService<InventoryTransacti
                 .build();
     }
 
-    @Override
-    protected String getEntityName() {
-        return "InventoryTransaction";
+    private InventoryTransaction convertToEntity(InventoryTransactionDTO dto) {
+        Product product = productRepository.findById(dto.getProductId())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado")); // Exceção mais específica
+
+        return InventoryTransaction.builder()
+                .product(product)
+                .type(TransactionType.valueOf(dto.getType())) // Certifique-se de que o tipo seja válido
+                .quantity(dto.getQuantity())
+                .reference(dto.getReference())
+                .notes(dto.getNotes())
+                .build();
     }
 }

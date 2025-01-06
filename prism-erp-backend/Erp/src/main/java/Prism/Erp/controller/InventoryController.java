@@ -1,9 +1,13 @@
 package Prism.Erp.controller;
 
 import Prism.Erp.dto.InventoryTransactionDTO;
+import Prism.Erp.service.InventoryService;
+import Prism.Erp.service.impl.InventoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.awt.print.Pageable;
 
 @RestController
 @RequestMapping("/api/v1/inventory")

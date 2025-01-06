@@ -5,6 +5,8 @@ import Prism.Erp.model.SalesOrder;
 import Prism.Erp.model.SalesOrderItem;
 import Prism.Erp.repository.CustomerRepository;
 import Prism.Erp.repository.ProductRepository;
+import Prism.Erp.repository.SalesOrderRepository;
+import Prism.Erp.service.SalesOrderService;
 import Prism.Erp.validation.ValidationService;
 import Prism.Erp.service.AbstractCrudService;
 import Prism.Erp.dto.SalesOrderItemDTO;
@@ -15,10 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
-@Slf4j
-public class SalesOrderServiceImpl extends AbstractCrudService<SalesOrder, SalesOrderDTO> {
+public class SalesOrderServiceImpl implements SalesOrderService {
+
+    private final SalesOrderRepository salesOrderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
     private final ValidationService validationService;
