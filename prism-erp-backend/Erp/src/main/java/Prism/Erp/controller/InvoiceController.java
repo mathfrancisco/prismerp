@@ -1,11 +1,16 @@
 package Prism.Erp.controller;
 
 import Prism.Erp.dto.InvoiceDTO;
+import Prism.Erp.dto.InvoiceTaxCalculationDTO;
 import Prism.Erp.model.InvoiceStatus;
 import Prism.Erp.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/v1/invoices")
@@ -29,5 +34,28 @@ public class InvoiceController {
             @PathVariable Long id,
             @RequestParam InvoiceStatus status) {
         return ResponseEntity.ok(invoiceService.updateStatus(id, status));
+    }
+    @GetMapping
+    public ResponseEntity<Page<InvoiceDTO>> getAllInvoices(Pageable pageable) {
+        return ResponseEntity.ok(invoiceService.getAllInvoices(pageable));
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<Page<InvoiceDTO>> getInvoicesByStatus(
+            @PathVariable InvoiceStatus status,
+            Pageable pageable) {
+        return ResponseEntity.ok(invoiceService.findInvoicesByStatus(status, pageable));
+    }
+
+    @PostMapping("/{id}/discount")
+    public ResponseEntity<InvoiceDTO> applyDiscount(
+            @PathVariable Long id,
+            @RequestParam BigDecimal discountPercentage) {
+        return ResponseEntity.ok(invoiceService.applyDiscount(id, discountPercentage));
+    }
+
+    @GetMapping("/{id}/taxes")
+    public ResponseEntity<InvoiceTaxCalculationDTO> calculateTaxes(@PathVariable Long id) {
+        return ResponseEntity.ok(invoiceService.calculateTaxes(id));
     }
 }

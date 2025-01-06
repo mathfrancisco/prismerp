@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 public class Product extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String code;
 
     @Column(nullable = false)
@@ -23,7 +23,11 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
-    private Integer stockQuantity;
+    @Column(nullable = false)
+    private Integer currentStock = 0;
+
+    @Column(nullable = false)
+    private Integer minimumStock = 0;
 
     @Column(nullable = false)
     private String category;
@@ -32,8 +36,4 @@ public class Product extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean active = true;
-
-
-    private Integer currentStock;
-    private Integer minimumStock;
 }

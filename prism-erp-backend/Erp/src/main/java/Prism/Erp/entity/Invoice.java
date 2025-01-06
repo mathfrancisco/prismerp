@@ -22,7 +22,13 @@ public class Invoice extends BaseEntity {
     private SalesOrder salesOrder;
 
     @Column(nullable = false)
+    private BigDecimal subtotal;
+
+    @Column(nullable = false)
     private BigDecimal totalAmount;
+
+    @Column
+    private BigDecimal discountPercentage;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
