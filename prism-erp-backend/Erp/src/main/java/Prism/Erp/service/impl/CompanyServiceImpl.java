@@ -3,6 +3,7 @@ package Prism.Erp.service.impl;
 import Prism.Erp.dto.AddressDTO;
 import Prism.Erp.dto.CompanyDTO;
 import Prism.Erp.entity.Company;
+import Prism.Erp.exception.CompanyNotFoundException;
 import Prism.Erp.model.Address;
 import Prism.Erp.repository.CompanyRepository;
 import Prism.Erp.service.CompanyService;
@@ -25,17 +26,16 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyDTO getCompanyById(Long id) {
         return companyRepository.findById(id)
                 .map(this::convertToDTO)
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada")); // Use uma exceção mais específica se possível
+                .orElseThrow(() -> new CompanyNotFoundException(id));
     }
 
     @Override
     public CompanyDTO updateCompany(Long id, CompanyDTO companyDTO) {
         Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+                .orElseThrow(() -> new CompanyNotFoundException(id));
 
         updateEntityFromDTO(company, companyDTO);
         return convertToDTO(companyRepository.save(company));
-
     }
 
 

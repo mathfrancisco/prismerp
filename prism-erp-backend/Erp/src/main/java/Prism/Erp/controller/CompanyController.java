@@ -2,6 +2,7 @@ package Prism.Erp.controller;
 
 import Prism.Erp.dto.CompanyDTO;
 import Prism.Erp.service.CompanyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @PostMapping
-    public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
+    public ResponseEntity<CompanyDTO> createCompany(@Valid @RequestBody CompanyDTO companyDTO) {
         return ResponseEntity.ok(companyService.createCompany(companyDTO));
     }
 
@@ -24,7 +25,9 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CompanyDTO> updateCompany(@PathVariable Long id, @RequestBody CompanyDTO companyDTO) {
+    public ResponseEntity<CompanyDTO> updateCompany(
+            @PathVariable Long id,
+            @Valid @RequestBody CompanyDTO companyDTO) {
         return ResponseEntity.ok(companyService.updateCompany(id, companyDTO));
     }
 }
