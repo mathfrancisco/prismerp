@@ -29,4 +29,7 @@ public abstract class BaseEntity {
 
     @Version
     private Integer version;
+
+    @Column(nullable = false)
+    private boolean active = true;
 }

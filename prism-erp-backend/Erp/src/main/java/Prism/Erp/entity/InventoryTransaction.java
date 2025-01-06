@@ -2,12 +2,14 @@ package Prism.Erp.entity;
 
 import Prism.Erp.model.TransactionType;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @Entity
 @Table(name = "inventory_transactions")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class InventoryTransaction extends BaseEntity {
 

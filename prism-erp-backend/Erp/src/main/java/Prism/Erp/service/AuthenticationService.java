@@ -1,9 +1,12 @@
 package Prism.Erp.service;
 
-import Prism.Erp.dto.AuthenticationRequest;
-import Prism.Erp.dto.AuthenticationResponse;
+import Prism.Erp.entity.AuthenticationRequest;
+import Prism.Erp.entity.AuthenticationResponse;
 import Prism.Erp.dto.UserDTO;
+import Prism.Erp.entity.RegisterRequest;
+import Prism.Erp.model.Role;
 import Prism.Erp.entity.User;
+import Prism.Erp.repository.UserRepository;
 import Prism.Erp.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +44,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );

@@ -1,12 +1,14 @@
 package Prism.Erp.controller;
 
-import Prism.Erp.dto.AuthenticationRequest;
-import Prism.Erp.dto.AuthenticationResponse;
+import Prism.Erp.entity.AuthenticationRequest;
+import Prism.Erp.entity.AuthenticationResponse;
 import Prism.Erp.entity.RegisterRequest;
 import Prism.Erp.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.naming.AuthenticationException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -21,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) throws AuthenticationException {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 }

@@ -32,4 +32,8 @@ public class Product extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean active = true;
+
+
+    private Integer currentStock;
+    private Integer minimumStock;
 }
