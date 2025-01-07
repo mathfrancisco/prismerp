@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -23,6 +25,28 @@ public class UserServiceImpl implements UserService {
     public Page<UserDTO> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(this::convertToDTO);
+    }
+
+    @Override
+    public List<UserDTO> findUsersByRole(Role role) {
+        return userRepository.findByRole(role).stream().map(this::convertToDTO).toList();
+    }
+
+    @Override
+    public List<UserDTO> searchUsersByName(String searchTerm) {
+        return userRepository.findByNameContaining(searchTerm).stream().map(this::convertToDTO).toList();
+    }
+    @Override
+    public List<UserDTO> findActiveUsers() {
+        return userRepository.findActiveUsers().stream().map(this::convertToDTO).toList();
+    }
+    @Override
+    public List<UserDTO> findByRoles(List<String> roles) {
+        return userRepository.findByRoles(roles).stream().map(this::convertToDTO).toList();
+    }
+    @Override
+    public List<UserDTO> findByEmailPattern(String emailPattern) {
+        return userRepository.findByEmailPattern(emailPattern).stream().map(this::convertToDTO).toList();
     }
 
     @Override
@@ -68,12 +92,4 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    private User convertToUser(UserDTO userDTO) {
-        return User.builder()
-                .firstName(userDTO.getFirstName())
-                .lastName(userDTO.getLastName())
-                .email(userDTO.getEmail())
-                .role(Role.valueOf(userDTO.getRole().toUpperCase()))
-                .build();
-    }
 }

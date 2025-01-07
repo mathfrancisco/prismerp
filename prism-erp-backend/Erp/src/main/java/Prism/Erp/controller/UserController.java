@@ -7,8 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import Prism.Erp.dto.UserDTO;
+import Prism.Erp.model.Role;
 import Prism.Erp.service.UserService;
 
+import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -24,12 +27,38 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(id, userDTO));
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<UserDTO>> getActiveUsers() {
+        return ResponseEntity.ok(userService.findActiveUsers());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDTO>> searchUsersByName(@RequestParam String searchTerm) {
+        return ResponseEntity.ok(userService.searchUsersByName(searchTerm));
+    }
+
+    @GetMapping("/role/{role}")
+    public ResponseEntity<List<UserDTO>> getUsersByRole(@PathVariable Role role) {
+        return ResponseEntity.ok(userService.findUsersByRole(role));
+    }
+
+    @GetMapping("/roles")
+    public ResponseEntity<List<UserDTO>> getUsersByRoles(@RequestParam List<String> roles) {
+        return ResponseEntity.ok(userService.findByRoles(roles));
+    }
+
+    @GetMapping("/email-pattern")
+    public ResponseEntity<List<UserDTO>> getUsersByEmailPattern(@RequestParam String emailPattern) {
+        return ResponseEntity.ok(userService.findByEmailPattern(emailPattern));
     }
 }

@@ -1,5 +1,6 @@
 package Prism.Erp.repository;
 
+import Prism.Erp.dto.UserDTO;
 import Prism.Erp.entity.User;
 import Prism.Erp.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,4 +38,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Additional security-focused query
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.active = true")
     Optional<User> findActiveUserByEmail(@Param("email") String email);
+
+
 }
