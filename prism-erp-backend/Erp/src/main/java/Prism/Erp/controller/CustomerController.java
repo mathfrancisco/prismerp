@@ -45,4 +45,8 @@ public class CustomerController {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/document/{documentNumber}")
+    public ResponseEntity<CustomerDTO> getByDocumentNumber(@PathVariable String documentNumber) {
+        return ResponseEntity.ok(customerService.getByDocumentNumber(documentNumber));
+    }
 }

@@ -18,15 +18,18 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+        if (customerRepository.findByDocumentNumber(customerDTO.getDocumentNumber()).isPresent()) {
+            throw new ResourceNotFoundException("Já existe um cliente com este número de documento.");
+        }
         Customer customer = convertToEntity(customerDTO);
         return convertToDTO(customerRepository.save(customer));
     }
 
     @Override
     public CustomerDTO getCustomerById(Long id) {
-        Customer customer = customerRepository.findById(id)
+        return customerRepository.findById(id)
+                .map(this::convertToDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com ID: " + id));
-        return convertToDTO(customer);
     }
 
     @Override
@@ -75,5 +78,12 @@ public class CustomerServiceImpl implements CustomerService {
                 .address(customerDTO.getAddress())
                 .active(customerDTO.getActive())
                 .build();
+    }
+
+    @Override
+    public CustomerDTO getByDocumentNumber(String documentNumber) {
+        return customerRepository.findByDocumentNumber(documentNumber)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com o número de documento: " + documentNumber));
     }
 }

@@ -10,4 +10,5 @@ public interface CustomerService {
     Page<CustomerDTO> getAllCustomers(Pageable pageable);
     CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO);
     void deleteCustomer(Long id);
+    CustomerDTO getByDocumentNumber(String documentNumber);
 }
