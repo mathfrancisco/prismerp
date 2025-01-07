@@ -9,6 +9,8 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 import java.time.Duration;
+import java.util.Map;
+
 
 @Configuration
 @EnableCaching
@@ -22,6 +24,9 @@ public class RedisConfig {
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(config)
+                .withInitialCacheConfigurations(Map.of("products", config)) // Adicione esta linha
                 .build();
     }
+
+
 }

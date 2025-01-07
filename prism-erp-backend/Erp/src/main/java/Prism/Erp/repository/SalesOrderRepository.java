@@ -11,6 +11,5 @@ import java.util.Optional;
 
 public interface SalesOrderRepository extends JpaRepository<SalesOrder, Long>, JpaSpecificationExecutor<SalesOrder> {
     Optional<SalesOrder> findByOrderNumber(String orderNumber);
-    List<SalesOrder> findByCustomerId(Long customerId);
     Page<SalesOrder> findByCustomerId(Long customerId, Pageable pageable); // Novo método com paginação
 }

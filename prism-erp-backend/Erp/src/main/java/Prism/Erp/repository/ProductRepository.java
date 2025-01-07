@@ -11,4 +11,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     Optional<Product> findByCode(String code);
 
     List<Product> findByCurrentStockLessThanEqual(int lowStockThreshold);
+
+    List<Product> findByCategory(String category);
 }

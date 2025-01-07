@@ -15,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +25,10 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CacheManager cacheManager;
 
     @Override
+    @CacheEvict(value = "products", allEntries = true)
     public ProductDTO create(ProductDTO productDTO) {
         if (productRepository.findByCode(productDTO.getCode()).isPresent()) {
             throw new BusinessException("Já existe um produto com este código.");
@@ -43,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "products", allEntries = true)
     public ProductDTO update(Long id, ProductDTO productDTO) {
         log.info("Atualizando produto com ID: {}", id);
         Product product = productRepository.findById(id)
@@ -54,14 +59,22 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+
     public Page<ProductDTO> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(this::convertToDTO);
     }
 
     @Override
+    @CacheEvict(value = "products", allEntries = true)
     public void delete(Long id) {
         productRepository.deleteById(id);
+    }
+
+    public List<ProductDTO> findByCategory(String category) {
+        return productRepository.findByCategory(category).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
 

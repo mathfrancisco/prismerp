@@ -132,7 +132,4 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 .build();
     }
 
-    private String getEntityName() { // Removido @Override e protected
-        return "SalesOrder";
-    }
 }

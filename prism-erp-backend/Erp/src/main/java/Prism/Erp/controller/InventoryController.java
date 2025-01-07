@@ -6,10 +6,11 @@ import Prism.Erp.service.InventoryService;
 import Prism.Erp.service.impl.InventoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class InventoryController {
 
     @GetMapping("/stock-levels")
     public ResponseEntity<Page<ProductStockDTO>> getStockLevels(Pageable pageable) {
-        return ResponseEntity.ok(inventoryService.getStockLevels((org.springframework.data.domain.Pageable) pageable));
+        return ResponseEntity.ok(inventoryService.getStockLevels(pageable));
     }
 
     @GetMapping("/low-stock")

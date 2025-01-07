@@ -10,6 +10,8 @@ import Prism.Erp.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
@@ -18,6 +20,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDTO createCompany(CompanyDTO companyDTO) {
+        if (companyRepository.existsByDocumentNumber(companyDTO.getDocumentNumber())) {
+            throw new CompanyNotFoundException("Já existe uma empresa com este número de documento.");
+        }
         Company company = convertToEntity(companyDTO);
         return convertToDTO(companyRepository.save(company));
     }
@@ -113,4 +118,31 @@ public class CompanyServiceImpl implements CompanyService {
             company.setAddress(null);
         }
     }
+    @Override
+    public List<CompanyDTO> findActiveCompanies() {
+        return companyRepository.findByActiveTrue().stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+    @Override
+    public List<CompanyDTO> findByNameContaining(String name) {
+        return companyRepository.findByNameContainingIgnoreCase(name).stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<CompanyDTO> findByCityContaining(String city) {
+        return companyRepository.findByAddressCityContainingIgnoreCase(city).stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<CompanyDTO> findByState(String state) {
+        return companyRepository.findByAddressStateIgnoreCase(state).stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
 }
