@@ -109,17 +109,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private void updateEntityFromDTO(Employee employee, EmployeeDTO employeeDTO) {
-        // Use o operador ternário ou atribuição condicional (Java 14+) para simplificar
-        employee.setEmployeeNumber(employeeDTO.getEmployeeNumber() != null ? employeeDTO.getEmployeeNumber() : employee.getEmployeeNumber());
-        employee.setFirstName(employeeDTO.getFirstName() != null ? employeeDTO.getFirstName() : employee.getFirstName());
-        // ... outros campos
+        employee.setEmployeeNumber(Optional.ofNullable(employeeDTO.getEmployeeNumber()).orElse(employee.getEmployeeNumber()));
+        employee.setFirstName(Optional.ofNullable(employeeDTO.getFirstName()).orElse(employee.getFirstName()));
+        employee.setLastName(Optional.ofNullable(employeeDTO.getLastName()).orElse(employee.getLastName()));
+        employee.setEmail(Optional.ofNullable(employeeDTO.getEmail()).orElse(employee.getEmail()));
+        employee.setPhone(Optional.ofNullable(employeeDTO.getPhone()).orElse(employee.getPhone()));
+        employee.setJoinDate(Optional.ofNullable(employeeDTO.getJoinDate()).orElse(employee.getJoinDate()));
+        employee.setStatus(Optional.ofNullable(employeeDTO.getStatus()).orElse(employee.getStatus()));
+        employee.setSalary(Optional.ofNullable(employeeDTO.getSalary()).orElse(employee.getSalary()));
 
         if (employeeDTO.getDepartmentId() != null) {
             Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
                     .orElseThrow(() -> new RuntimeException("Departamento não encontrado")); // Trate a exceção adequadamente
             employee.setDepartment(department);
         } else {
-            employee.setDepartment(null);
+            // Lógica para lidar com a remoção do departamento, se necessário
+             employee.setDepartment(null);
         }
     }
+
 }

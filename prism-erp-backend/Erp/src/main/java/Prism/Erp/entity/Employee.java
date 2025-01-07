@@ -2,8 +2,7 @@ package Prism.Erp.entity;
 
 import Prism.Erp.model.EmploymentStatus;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +10,9 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "employees")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Employee extends BaseEntity {
 
