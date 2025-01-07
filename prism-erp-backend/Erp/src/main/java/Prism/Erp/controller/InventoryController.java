@@ -35,4 +35,9 @@ public class InventoryController {
     public ResponseEntity<List<ProductStockDTO>> getLowStockProducts() {
         return ResponseEntity.ok(inventoryService.getLowStockProducts());
     }
+
+    @GetMapping("/transactions/product/{productId}")
+    public ResponseEntity<List<InventoryTransactionDTO>> getTransactionsByProductId(@PathVariable Long productId) {
+        return ResponseEntity.ok(inventoryService.getTransactionsByProductId(productId));
+    }
 }

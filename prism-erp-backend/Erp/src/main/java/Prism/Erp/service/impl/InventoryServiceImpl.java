@@ -32,7 +32,7 @@ public class InventoryServiceImpl implements InventoryService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         InventoryTransaction transaction = convertToEntity(transactionDTO);
-        
+
         // Update product stock
         updateProductStock(product, transaction);
         productRepository.save(product);
@@ -105,5 +105,12 @@ public class InventoryServiceImpl implements InventoryService {
                 .reference(dto.getReference())
                 .notes(dto.getNotes())
                 .build();
+    }
+
+    @Override
+    public List<InventoryTransactionDTO> getTransactionsByProductId(Long productId) {
+        return inventoryTransactionRepository.findByProductId(productId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 }

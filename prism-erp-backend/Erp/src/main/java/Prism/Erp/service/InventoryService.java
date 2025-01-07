@@ -15,5 +15,6 @@ public interface InventoryService {
     InventoryTransactionDTO createTransaction(InventoryTransactionDTO transactionDTO);
     Page<ProductStockDTO> getStockLevels(Pageable pageable); // Defina ProductStockDTO
     List<ProductStockDTO> getLowStockProducts();
+    List<InventoryTransactionDTO> getTransactionsByProductId(Long productId);
 
 }
