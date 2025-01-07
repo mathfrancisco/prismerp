@@ -1,30 +1,43 @@
 package Prism.Erp.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.net.URI;
+import java.time.Instant;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(
-                "NOT_FOUND",
-                ex.getMessage(),
-                System.currentTimeMillis()
-        );
-        return ResponseEntity.status(404).body(error);
+    public ResponseEntity<ProblemDetail> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problemDetail.setType(URI.create("/errors/not-found")); // URI do seu site
+        problemDetail.setTitle("Recurso não encontrado");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
-        ErrorResponse error = new ErrorResponse(
-                "BUSINESS_ERROR",
-                ex.getMessage(),
-                System.currentTimeMillis()
-        );
-        return ResponseEntity.status(400).body(error);
+    public ResponseEntity<ProblemDetail> handleBusinessException(BusinessException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        problemDetail.setType(URI.create("/errors/not-found")); // URI do seu site
+        problemDetail.setTitle("Erro de negócio");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
+
+    @ExceptionHandler(CompanyNotFoundException.class)
+    public ResponseEntity<ProblemDetail> handleCompanyNotFoundException(CompanyNotFoundException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problemDetail.setType(URI.create("/errors/not-found")); // URI do seu site
+        problemDetail.setTitle("Empresa não encontrada");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
+    }
+
+    // Outros handlers para exceções específicas, se necessário
 }

@@ -1,8 +1,7 @@
 package Prism.Erp.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -10,6 +9,9 @@ import java.math.BigDecimal;
 @Table(name = "products")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product extends BaseEntity {
 
     @Column(nullable = false, unique = true)
