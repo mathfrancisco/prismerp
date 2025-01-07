@@ -131,5 +131,11 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 .totalPrice(item.getTotalPrice())
                 .build();
     }
+    @Override
+    public SalesOrderDTO getByOrderNumber(String orderNumber) {
+        return salesOrderRepository.findByOrderNumber(orderNumber)
+                .map(this::toDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido de venda não encontrado com o número: " + orderNumber));
+    }
 
 }

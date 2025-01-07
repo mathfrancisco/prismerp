@@ -11,4 +11,5 @@ public interface SalesOrderService {
     SalesOrderDTO getOrderById(Long id);
     SalesOrderDTO updateStatus(Long id, OrderStatus status);
     Page<SalesOrderDTO> getCustomerOrders(Long customerId, Pageable pageable);
+    SalesOrderDTO getByOrderNumber(String orderNumber);
 }

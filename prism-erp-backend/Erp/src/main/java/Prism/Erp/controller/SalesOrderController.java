@@ -39,4 +39,8 @@ public class SalesOrderController {
             Pageable pageable) {
         return ResponseEntity.ok(salesOrderService.getCustomerOrders(customerId, pageable));
     }
+    @GetMapping("/number/{orderNumber}")
+    public ResponseEntity<SalesOrderDTO> getByOrderNumber(@PathVariable String orderNumber) {
+        return ResponseEntity.ok(salesOrderService.getByOrderNumber(orderNumber));
+    }
 }
