@@ -22,4 +22,5 @@ public interface InvoiceService {
     InvoiceDTO applyDiscount(Long id, BigDecimal discountPercentage);
 
     InvoiceTaxCalculationDTO calculateTaxes(Long id);
+    InvoiceDTO getByInvoiceNumber(String invoiceNumber);
 }

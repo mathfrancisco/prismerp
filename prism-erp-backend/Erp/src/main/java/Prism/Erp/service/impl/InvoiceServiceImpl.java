@@ -4,6 +4,7 @@ import Prism.Erp.dto.InvoiceDTO;
 import Prism.Erp.dto.InvoiceTaxCalculationDTO;
 import Prism.Erp.entity.Invoice;
 import Prism.Erp.entity.SalesOrder;
+import Prism.Erp.exception.ResourceNotFoundException;
 import Prism.Erp.model.InvoiceStatus;
 import Prism.Erp.repository.InvoiceRepository;
 import Prism.Erp.repository.SalesOrderRepository;
@@ -188,5 +189,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
     }
 
-
+    @Override
+    public InvoiceDTO getByInvoiceNumber(String invoiceNumber) {
+        return invoiceRepository.findByInvoiceNumber(invoiceNumber)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Fatura não encontrada com o número: " + invoiceNumber));
+    }
 }

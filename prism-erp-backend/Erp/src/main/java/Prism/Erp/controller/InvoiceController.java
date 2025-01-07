@@ -58,4 +58,8 @@ public class InvoiceController {
     public ResponseEntity<InvoiceTaxCalculationDTO> calculateTaxes(@PathVariable Long id) {
         return ResponseEntity.ok(invoiceService.calculateTaxes(id));
     }
+    @GetMapping("/number/{invoiceNumber}")
+    public ResponseEntity<InvoiceDTO> getByInvoiceNumber(@PathVariable String invoiceNumber) {
+        return ResponseEntity.ok(invoiceService.getByInvoiceNumber(invoiceNumber));
+    }
 }
