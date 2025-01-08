@@ -1,1 +1,57 @@
-<p>customer-list works!</p>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4">Customers</h1>
+
+  <div class="mb-4">
+    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange($event)" placeholder="Search customers..." class="border px-2 py-1 rounded">
+  </div>
+
+  <div *ngIf="isLoading" class="text-center mt-4">
+    Loading...
+  </div>
+
+  <div *ngIf="error" class="text-red-500 mt-4">{{ error }}</div>
+
+  <table *ngIf="!isLoading && !error && customers.length > 0" class="table-auto w-full">
+    <thead>
+    <tr>
+      <th class="px-4 py-2">Name</th>
+      <th class="px-4 py-2">Document Number</th>
+      <th class="px-4 py-2">Email</th>
+      <th class="px-4 py-2">Phone</th>
+      <th class="px-4 py-2">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let customer of customers">
+      <td class="border px-4 py-2">{{ customer.name }}</td>
+      <td class="border px-4 py-2">{{ customer.documentNumber }}</td>
+      <td class="border px-4 py-2">{{ customer.email }}</td>
+      <td class="border px-4 py-2">{{ customer.phone }}</td>
+      <td class="border px-4 py-2">
+        <a [routerLink]="['/customers', customer.id]" class="text-blue-500 hover:text-blue-700 mr-2">View</a>
+        <a [routerLink]="['/customers', customer.id, 'edit']" class="text-yellow-500 hover:text-yellow-700 mr-2">Edit</a>
+        <button (click)="deleteCustomer(customer)" class="text-red-500 hover:text-red-700">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && !error && customers.length === 0" class="text-center mt-4">
+    No customers found.
+  </div>
+
+  <div class="mt-4" *ngIf="totalPages > 1">
+    <ul class="pagination">
+      <li [class.disabled]="currentPage === 0">
+        <button (click)="onPageChange(currentPage - 1)">Previous</button>
+      </li>
+      <li *ngFor="let page of getPages()" [class.active]="page === currentPage">
+        <button (click)="onPageChange(page)">{{ page + 1 }}</button>
+      </li>
+      <li [class.disabled]="currentPage === totalPages - 1">
+        <button (click)="onPageChange(currentPage + 1)">Next</button>
+      </li>
+    </ul>
+  </div>
+</div>
+

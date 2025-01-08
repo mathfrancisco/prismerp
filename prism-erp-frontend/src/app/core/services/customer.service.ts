@@ -12,8 +12,12 @@ export class CustomerService {
 
   constructor(private http: HttpClient) {}
 
-  getCustomers(page: number, size: number): Observable<any> { // Paginação
-    return this.http.get<any>(`${this.API_URL}?page=${page}&size=${size}`);
+  getCustomers(page: number, size: number, searchTerm: string = ''): Observable<any> {
+    let url = `${this.API_URL}?page=${page}&size=${size}`;
+    if (searchTerm) {
+      url += `&searchTerm=${searchTerm}`; // Adiciona o termo de busca à URL
+    }
+    return this.http.get<any>(url);
   }
 
   getCustomerById(id: number): Observable<CustomerDTO> {

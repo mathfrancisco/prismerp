@@ -1,1 +1,12 @@
-<p>customer-form works!</p>
+<!-- customer-form.component.html -->
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+  <div class="mb-4">
+    <label for="name" class="block">Name:</label>
+    <input type="text" id="name" formControlName="name" class="w-full border rounded px-2 py-1" required>
+  </div>
+
+</form>
+<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+  {{ customer ? 'Update' : 'Create' }}
+</button>
+
