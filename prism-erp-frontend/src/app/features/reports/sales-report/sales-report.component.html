@@ -1,1 +1,44 @@
-<p>sales-report works!</p>
+<!-- sales-report.component.html -->
+<app-report-base title="Sales Report">
+  <div class="grid grid-cols-3 gap-6 mb-6">
+    <div class="p-4 bg-blue-50 rounded-lg">
+      <p class="text-sm text-gray-600">Total Sales</p>
+      <p class="text-2xl font-bold text-gray-900">$62,450</p>
+      <p class="text-sm text-blue-600">+15.8% vs last period</p>
+    </div>
+    <div class="p-4 bg-green-50 rounded-lg">
+      <p class="text-sm text-gray-600">Orders</p>
+      <p class="text-2xl font-bold text-gray-900">1,284</p>
+      <p class="text-sm text-green-600">+10.2% vs last period</p>
+    </div>
+    <div class="p-4 bg-indigo-50 rounded-lg">
+      <p class="text-sm text-gray-600">Average Order Value</p>
+      <p class="text-2xl font-bold text-gray-900">$48.64</p>
+      <p class="text-sm text-indigo-600">+5.1% vs last period</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6 mb-6">
+    <div class="h-64">
+      <canvas #salesTrendChart></canvas>
+    </div>
+    <div class="h-64">
+      <canvas #productPerformanceChart></canvas>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 rounded-lg p-4">
+    <h3 class="text-lg font-semibold mb-4">Top Performing Products</h3>
+    <div class="space-y-4">
+      <div *ngFor="let product of topProducts" class="flex justify-between items-center">
+        <div>
+          <p class="font-medium">{{ product.name }}</p>
+          <p class="text-sm text-gray-600">{{ product.sales }} units sold</p>
+        </div>
+        <div [ngClass]="{'text-green-600': product.growth > 0, 'text-red-600': product.growth < 0}">
+          {{ product.growth > 0 ? '+' : '' }}{{ product.growth }}%
+        </div>
+      </div>
+    </div>
+  </div>
+</app-report-base>
