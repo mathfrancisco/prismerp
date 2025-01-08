@@ -1,1 +1,21 @@
-<p>activity-summary works!</p>
+<div class="bg-white rounded-lg shadow p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-xl font-semibold text-gray-900">Recent Activity</h2>
+    <button class="text-sm text-blue-600 hover:text-blue-800">View All</button>
+  </div>
+
+  <div class="space-y-4">
+    <div *ngFor="let activity of activities" class="flex items-start space-x-4">
+      <div [ngClass]="getIconClass(activity.type)" class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center">
+        <i [class]="activity.icon"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-gray-900">{{ activity.description }}</p>
+        <p class="text-sm text-gray-500">{{ activity.timestamp }}</p>
+      </div>
+      <span [ngClass]="getStatusClass(activity.status)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+            {{ activity.status }}
+          </span>
+    </div>
+  </div>
+</div>

@@ -52,6 +52,12 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  {
+    path: 'users',
+    component: UserListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] }
+  },
   { path: 'reset-password', component: ResetPasswordComponent },
 
   // Protected Routes
