@@ -1,0 +1,12 @@
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-10px, -10px); }
+}
+
+.group:hover .group-hover\:bg-emerald-500 {
+  background-color: rgb(16, 185, 129);
+}
+
+.group:hover .group-hover\:bg-emerald-600 {
+  background-color: rgb(5, 150, 105);
+}
