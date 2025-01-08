@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 // Guards
 import { AuthGuard } from './core/guards/auth.guard';
 
-// Components
-import { DashboardComponent } from './features/dashboard/dashboard.component';
+// Layouts
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 // Auth Components
 import { LoginComponent } from './core/auth/login/login.component';
@@ -45,100 +45,54 @@ import { OrdersComponent as SalesOrdersComponent } from './features/sales/orders
 import { CustomersComponent } from './features/sales/customers/customers.component';
 import { QuotationsComponent } from './features/sales/quotations/quotations.component';
 
+// Dashboard Component
+import { DashboardComponent } from './features/dashboard/dashboard.component';
+
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: DashboardComponent }, // Página inicial pública
+      // Outras páginas públicas podem ser adicionadas aqui
+    ],
+  },
+
+  // Protected Routes
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'users', component: UserListComponent },
+      { path: 'users/:id', component: UserDetailComponent },
+      { path: 'finance/invoices', component: InvoicesComponent },
+      { path: 'finance/payments', component: PaymentsComponent },
+      { path: 'finance/reports', component: FinanceReportsComponent },
+      { path: 'hr/employees', component: EmployeesComponent },
+      { path: 'hr/departments', component: DepartmentsComponent },
+      { path: 'inventory/products', component: ProductsComponent },
+      { path: 'inventory/stock-levels', component: StockLevelsComponent },
+      { path: 'inventory/transactions', component: TransactionsComponent },
+      { path: 'purchase/orders', component: PurchaseOrdersComponent },
+      { path: 'purchase/suppliers', component: SuppliersComponent },
+      { path: 'reports/sales', component: SalesReportComponent },
+      { path: 'reports/inventory', component: InventoryReportComponent },
+      { path: 'reports/finance', component: FinanceReportComponent },
+      { path: 'sales/orders', component: SalesOrdersComponent },
+      { path: 'sales/customers', component: CustomersComponent },
+      { path: 'sales/quotations', component: QuotationsComponent },
+    ],
+  },
 
   // Public Routes
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  {
-    path: 'users',
-    component: UserListComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['ADMIN'] }
-  },
   { path: 'reset-password', component: ResetPasswordComponent },
 
-  // Protected Routes
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-
-  // User Management
-  {
-    path: 'users',
-    canActivate: [AuthGuard],
-    children: [
-      { path: '', component: UserListComponent },
-      { path: ':id', component: UserDetailComponent },
-    ],
-  },
-
-  // Finance Module
-  {
-    path: 'finance',
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'invoices', component: InvoicesComponent },
-      { path: 'payments', component: PaymentsComponent },
-      { path: 'reports', component: FinanceReportsComponent },
-    ],
-  },
-
-  // HR Module
-  {
-    path: 'hr',
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'employees', component: EmployeesComponent },
-      { path: 'departments', component: DepartmentsComponent },
-    ],
-  },
-
-  // Inventory Module
-  {
-    path: 'inventory',
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'products', component: ProductsComponent },
-      { path: 'stock-levels', component: StockLevelsComponent },
-      { path: 'transactions', component: TransactionsComponent },
-    ],
-  },
-
-  // Purchase Module
-  {
-    path: 'purchase',
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'orders', component: PurchaseOrdersComponent },
-      { path: 'suppliers', component: SuppliersComponent },
-    ],
-  },
-
-  // Reports Module
-  {
-    path: 'reports',
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'sales', component: SalesReportComponent },
-      { path: 'inventory', component: InventoryReportComponent },
-      { path: 'finance', component: FinanceReportComponent },
-    ],
-  },
-
-  // Sales Module
-  {
-    path: 'sales',
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'orders', component: SalesOrdersComponent },
-      { path: 'customers', component: CustomersComponent },
-      { path: 'quotations', component: QuotationsComponent },
-    ],
-  },
-
   // Wildcard Route for 404 - Not Found
-  { path: '**', redirectTo: '/dashboard' },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

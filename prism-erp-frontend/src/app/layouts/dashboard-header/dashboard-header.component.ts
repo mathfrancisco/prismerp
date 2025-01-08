@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-dashboard-header',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  templateUrl: './dashboard-header.component.html',
+  styleUrls: ['./dashboard-header.component.scss']
 })
-export class HeaderComponent {
-
-}
+export class DashboardHeaderComponent {}

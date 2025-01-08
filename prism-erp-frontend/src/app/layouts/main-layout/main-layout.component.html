@@ -1,18 +1,41 @@
 <div class="h-screen flex flex-col">
   <!-- Header -->
-  <app-header class="z-10" />
+  <app-header class="z-10"></app-header>
 
   <!-- Main Content -->
-  <div class="flex-1 flex overflow-hidden">
-    <!-- Sidebar -->
-    <app-sidebar class="w-64 flex-shrink-0 border-r border-gray-200" />
+  <div class="flex-1 overflow-auto bg-gray-50">
+    <section id="home" class="p-6 bg-white shadow-md">
+      <h1 class="text-3xl font-bold text-center mb-4">Bem-vindo ao Prism ERP</h1>
+      <p class="text-center text-gray-700">O sistema de gestão empresarial moderno e eficiente.</p>
+    </section>
 
-    <!-- Content Area -->
-    <main class="flex-1 overflow-auto bg-gray-50 p-6">
-      <router-outlet />
-    </main>
+    <section id="services" class="p-6">
+      <h2 class="text-2xl font-semibold mb-4">Serviços</h2>
+      <ul class="list-disc pl-5">
+        <li>Gestão de Clientes</li>
+        <li>Gestão de Funcionários</li>
+        <li>Gestão de Departamentos</li>
+        <li>Vendas e Estoque</li>
+        <li>Faturamento</li>
+      </ul>
+    </section>
+
+    <section id="benefits" class="p-6 bg-white shadow-md">
+      <h2 class="text-2xl font-semibold mb-4">Benefícios</h2>
+      <ul class="list-disc pl-5">
+        <li>Interface intuitiva e fácil de usar</li>
+        <li>Relatórios detalhados e insights</li>
+        <li>Integração com diversas plataformas</li>
+        <li>Segurança e confiabilidade</li>
+      </ul>
+    </section>
+
+    <section id="about" class="p-6">
+      <h2 class="text-2xl font-semibold mb-4">Sobre Nós</h2>
+      <p>O Prism ERP é desenvolvido por uma equipe dedicada a fornecer soluções de software de alta qualidade para empresas de todos os tamanhos. Nossa missão é ajudar as empresas a otimizar seus processos e alcançar seus objetivos de negócios.</p>
+    </section>
   </div>
 
   <!-- Footer -->
-  <app-footer />
+  <app-footer></app-footer>
 </div>

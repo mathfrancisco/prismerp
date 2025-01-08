@@ -1,1 +1,18 @@
 :host { display: block; height: 100vh; }
+
+h1, h2 {
+  color: #2563eb; // Cor primária
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
