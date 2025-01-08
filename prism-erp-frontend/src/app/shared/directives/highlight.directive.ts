@@ -1,11 +1,10 @@
-import { Directive } from '@angular/core';
+import { Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appHighlight]',
-  standalone: true
+  standalone: true,
 })
 export class HighlightDirective {
-
-  constructor() { }
-
+  constructor(private el: ElementRef) {}
+  // Lógica da diretiva
 }
