@@ -1,14 +1,47 @@
-<footer class="bg-white border-t border-gray-200">
-  <div class="max-w-7xl mx-auto py-4 px-6">
-    <div class="flex justify-between items-center">
-      <p class="text-sm text-gray-500">
-        © {{ currentYear }} CompanyName. All rights reserved.
-      </p>
-      <div class="flex space-x-6">
-        <a href="#" class="text-sm text-gray-500 hover:text-gray-900">Privacy Policy</a>
-        <a href="#" class="text-sm text-gray-500 hover:text-gray-900">Terms of Service</a>
-        <a href="#" class="text-sm text-gray-500 hover:text-gray-900">Contact</a>
+<footer class="bg-gray-800 text-white py-12 relative overflow-hidden">
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="mb-6 md:mb-0 text-center md:text-left">
+        <h4 class="text-xl font-semibold mb-4">Prism ERP</h4>
+        <p class="text-sm text-gray-300 mb-4">
+          Soluções completas para gestão empresarial.
+        </p>
+        <p class="text-sm text-gray-400">
+          &copy; {{ currentYear }} Prism ERP. Todos os direitos reservados.
+        </p>
+      </div>
+      <div class="mb-6 md:mb-0 text-center md:text-left">
+        <h4 class="text-xl font-semibold mb-4">Navegação</h4>
+        <ul class="space-y-2">
+          <li><a href="/" class="text-sm text-gray-300 hover:text-white hover:underline transition-colors duration-200">Home</a></li>
+          <li><a href="/services" class="text-sm text-gray-300 hover:text-white hover:underline transition-colors duration-200">Serviços</a></li>
+          <li><a href="/benefits" class="text-sm text-gray-300 hover:text-white hover:underline transition-colors duration-200">Benefícios</a></li>
+          <li><a href="/about" class="text-sm text-gray-300 hover:text-white hover:underline transition-colors duration-200">Sobre Nós</a></li>
+          <li><a href="/contact" class="text-sm text-gray-300 hover:text-white hover:underline transition-colors duration-200">Contato</a></li>
+        </ul>
+      </div>
+      <div class="text-center md:text-left">
+        <h4 class="text-xl font-semibold mb-4">Contato</h4>
+        <p class="text-sm text-gray-300 mb-2">
+          <fa-icon [icon]="['fas', 'map-marker-alt']" class="mr-2"></fa-icon>
+          Endereço: Rua Exemplo, 123 - Centro
+        </p>
+        <p class="text-sm text-gray-300 mb-2">
+          <fa-icon [icon]="['fas', 'phone']" class="mr-2"></fa-icon>
+          Telefone: (11) 1234-5678
+        </p>
+        <p class="text-sm text-gray-300 mb-4">
+          <fa-icon [icon]="['fas', 'envelope']" class="mr-2"></fa-icon>
+          Email: contato&#64;prism.com.br
+        </p>
+        <div class="flex space-x-4 justify-center md:justify-start">
+          <a href="#" class="text-gray-300 hover:text-white" aria-label="Facebook"><fa-icon [icon]="['fab', 'facebook-f']" class="text-lg"></fa-icon></a>
+          <a href="#" class="text-gray-300 hover:text-white" aria-label="Twitter"><fa-icon [icon]="['fab', 'twitter']" class="text-lg"></fa-icon></a>
+          <a href="#" class="text-gray-300 hover:text-white" aria-label="Instagram"><fa-icon [icon]="['fab', 'instagram']" class="text-lg"></fa-icon></a>
+          <a href="#" class="text-gray-300 hover:text-white" aria-label="Linkedin"><fa-icon [icon]="['fab', 'linkedin-in']" class="text-lg"></fa-icon></a>
+        </div>
       </div>
     </div>
   </div>
+  <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent to-gray-700 z-0"></div>
 </footer>

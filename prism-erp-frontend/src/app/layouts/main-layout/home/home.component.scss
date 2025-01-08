@@ -1,0 +1,38 @@
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.carousel-slide {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+  flex: 0 0 100%;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-controls {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 10px;
+}
+
+.carousel-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #475569;
+}

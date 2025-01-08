@@ -4,6 +4,10 @@ import {RouterModule, RouterOutlet} from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { FooterComponent } from '../footer/footer.component';
+import {HomeComponent} from './home/home.component';
+import {ServicesComponent} from './services/services.component';
+import {BenefitsComponent} from './benefits/benefits.component';
+import {AboutComponent} from './about/about.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -14,7 +18,11 @@ import { FooterComponent } from '../footer/footer.component';
     RouterOutlet,
     FooterComponent,
     RouterModule,
-    CommonModule
+    CommonModule,
+    HomeComponent,
+    ServicesComponent,
+    BenefitsComponent,
+    AboutComponent
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss'

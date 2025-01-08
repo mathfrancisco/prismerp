@@ -1,11 +1,24 @@
-<header class="bg-blue-600 text-white p-4">
-  <nav class="flex justify-between items-center">
-    <div class="text-lg font-bold">Prism ERP</div>
-    <ul class="flex space-x-4">
-      <li><a routerLink="/home" class="hover:underline">Home</a></li>
-      <li><a routerLink="/services" class="hover:underline">Serviços</a></li>
-      <li><a routerLink="/benefits" class="hover:underline">Benefícios</a></li>
-      <li><a routerLink="/about" class="hover:underline">Sobre Nós</a></li>
-    </ul>
-  </nav>
+<header class="bg-gray-800 text-white p-4 shadow-md relative">
+  <div class="container mx-auto flex justify-between items-center relative z-10">
+    <a href="/" class="text-2xl font-bold flex items-center">
+      <fa-icon [icon]="['fas', 'cube']" class="mr-2 text-blue-400"></fa-icon>
+      Prism ERP
+    </a>
+    <nav class="flex items-center">
+      <ul class="flex space-x-6">
+        <li><a href="/" class="hover:text-gray-300 transition-colors duration-200">Home</a></li>
+        <li><a href="/services" class="hover:text-gray-300 transition-colors duration-200">Serviços</a></li>
+        <li><a href="/benefits" class="hover:text-gray-300 transition-colors duration-200">Benefícios</a></li>
+        <li><a href="/about" class="hover:text-gray-300 transition-colors duration-200">Sobre Nós</a></li>
+        <li><a href="/contact" class="hover:text-gray-300 transition-colors duration-200">Contato</a></li>
+      </ul>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg ml-6 hidden md:inline-block transition-colors duration-200">
+        Solicitar Demo
+      </button>
+    </nav>
+    <button class="text-white md:hidden p-2 focus:outline-none">
+      <fa-icon [icon]="['fas', 'bars']" class="text-2xl"></fa-icon>
+    </button>
+  </div>
+  <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent to-gray-700 z-0"></div>
 </header>
