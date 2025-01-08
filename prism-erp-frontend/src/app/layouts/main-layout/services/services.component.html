@@ -1,59 +1,50 @@
-<section id="services" class="py-12 bg-gray-100 relative overflow-hidden">
-  <div class="container mx-auto px-4 relative z-10">
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-      <span class="text-blue-500">Nossos Serviços:</span> Soluções personalizadas para seu negócio
-    </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'users']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Gestão de Clientes</h3>
-        </div>
-        <p class="text-gray-600">Cadastro completo, histórico de interações e gestão de documentos.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
+        <button class="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center group-hover:bg-emerald-500">
+          <span>Saiba mais</span>
+          <fa-icon [icon]="['fas', 'arrow-right']" class="ml-2"></fa-icon>
+        </button>
       </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'user-tie']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Gestão de Funcionários</h3>
+
+      <!-- Gestão de Faturamento -->
+      <div class="bg-slate-800 rounded-xl p-6 hover:bg-slate-700 transition-all duration-300 transform hover:-translate-y-2 group">
+        <div class="flex items-center mb-6">
+          <div class="bg-emerald-500 p-4 rounded-lg group-hover:bg-emerald-600 transition-colors duration-300">
+            <fa-icon [icon]="['fas', 'file-invoice-dollar']" class="text-2xl text-white"></fa-icon>
+          </div>
+          <h3 class="text-xl font-semibold text-white ml-4">Gestão de Faturamento</h3>
         </div>
-        <p class="text-gray-600">Cadastro de funcionários, vínculo com departamentos e gestão de cargos.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'sitemap']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Gestão de Departamentos</h3>
-        </div>
-        <p class="text-gray-600">Estrutura organizacional, hierarquia de gestão e KPIs departamentais.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'shopping-cart']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Gestão de Vendas</h3>
-        </div>
-        <p class="text-gray-600">Pedidos de venda, acompanhamento de status e histórico de transações.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'warehouse']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Gestão de Estoque</h3>
-        </div>
-        <p class="text-gray-600">Controle de entrada/saída, alertas de baixo estoque e relatórios.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'file-invoice-dollar']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Gestão de Faturamento</h3>
-        </div>
-        <p class="text-gray-600">Geração de faturas, cálculo de impostos e gestão de descontos.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
+        <ul class="space-y-3 mb-6 text-gray-300">
+          <li class="flex items-center">
+            <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+            Geração de faturas
+          </li>
+          <li class="flex items-center">
+            <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+            Cálculo de impostos
+          </li>
+          <li class="flex items-center">
+            <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+            Gestão de descontos
+          </li>
+        </ul>
+        <button class="w-full bg-slate-700 hover:bg-slate-600 text-white py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center group-hover:bg-emerald-500">
+          <span>Saiba mais</span>
+          <fa-icon [icon]="['fas', 'arrow-right']" class="ml-2"></fa-icon>
+        </button>
       </div>
     </div>
   </div>
-  <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent to-gray-50 z-0"></div>
-  <div class="absolute top-0 left-0 w-full h-full bg-no-repeat bg-cover opacity-10" style="background-image: url('assets/img/bg-pattern.svg');"></div>
+
+  <!-- Background Elements -->
+  <div class="absolute top-0 left-0 w-full h-full">
+    <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-slate-800 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-slate-800 to-transparent"></div>
+  </div>
+
+  <!-- Optional: Animated Background Dots -->
+  <div class="absolute inset-0 z-0">
+    <div class="absolute w-4 h-4 bg-emerald-500 rounded-full opacity-10" style="top: 10%; left: 25%; animation: float 6s ease-in-out infinite;"></div>
+    <div class="absolute w-6 h-6 bg-emerald-500 rounded-full opacity-10" style="top: 50%; left: 15%; animation: float 8s ease-in-out infinite;"></div>
+    <div class="absolute w-3 h-3 bg-emerald-500 rounded-full opacity-10" style="top: 30%; left: 85%; animation: float 7s ease-in-out infinite;"></div>
+    <div class="absolute w-5 h-5 bg-emerald-500 rounded-full opacity-10" style="top: 70%; left: 75%; animation: float 9s ease-in-out infinite;"></div>
+  </div>
 </section>
