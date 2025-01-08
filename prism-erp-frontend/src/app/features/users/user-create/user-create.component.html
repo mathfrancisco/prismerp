@@ -1,0 +1,52 @@
+<div class="container mx-auto px-4 py-8">
+  <div *ngIf="isLoading" class="flex justify-center items-center h-full">
+    <div class="spinner"></div>
+  </div>
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+    <strong class="font-bold">Error!</strong>
+    <span class="block sm:inline">{{ error.message }}</span>
+  </div>
+  <h1 class="text-3xl font-bold mb-6">Create User</h1>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+        <input type="text" id="firstName" formControlName="firstName" class="form-input" required>
+        <div *ngIf="userForm.get('firstName')?.invalid && (userForm.get('firstName')?.dirty || userForm.get('firstName')?.touched)" class="text-red-500 text-sm">
+          First name is required.
+        </div>
+      </div>
+      <div>
+        <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+        <input type="text" id="lastName" formControlName="lastName" class="form-input" required>
+        <div *ngIf="userForm.get('lastName')?.invalid && (userForm.get('lastName')?.dirty || userForm.get('lastName')?.touched)" class="text-red-500 text-sm">
+          Last name is required.
+        </div>
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" id="email" formControlName="email" class="form-input" required>
+        <div *ngIf="userForm.get('email')?.invalid && (userForm.get('email')?.dirty || userForm.get('email')?.touched)" class="text-red-500 text-sm">
+          Valid email is required.
+        </div>
+      </div>
+      <div>
+        <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+        <select id="role" formControlName="role" class="form-input" required>
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+        <div *ngIf="userForm.get('role')?.invalid && (userForm.get('role')?.dirty || userForm.get('role')?.touched)" class="text-red-500 text-sm">
+          Role is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <button type="submit" [disabled]="!userForm.valid || isLoading" class="btn btn-primary">
+        <fa-icon [icon]="['fas', 'save']" class="mr-2"></fa-icon> Create User
+      </button>
+    </div>
+  </form>
+</div>
+

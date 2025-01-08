@@ -28,5 +28,9 @@ public class UserDTO {
 
     @NotBlank(message = "Role cannot be blank")
     private String role;
+
+    @NotBlank(message = "Role cannot be blank")
+    private String password;
+
 }
 

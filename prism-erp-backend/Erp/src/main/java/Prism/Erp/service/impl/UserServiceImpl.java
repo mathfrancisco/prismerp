@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Page<UserDTO> getAllUsers(Pageable pageable) {
@@ -55,6 +57,30 @@ public class UserServiceImpl implements UserService {
                 .map(this::convertToDTO)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
     }
+    @Override
+    @Transactional
+    public UserDTO createUser(UserDTO userDTO) {
+        // Validações
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new IllegalArgumentException("Email already exists.");
+        }
+        // ... outras validações que você precisar
+
+        User user = convertFromDTO(userDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // Codifica a senha
+        User savedUser = userRepository.save(user);
+        return convertToDTO(savedUser);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        // Exclusão lógica (recomendado)
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+        user.setActive(false); // Define o usuário como inativo
+        userRepository.save(user);
+    }
 
     @Override
     @Transactional
@@ -65,6 +91,18 @@ public class UserServiceImpl implements UserService {
         updateUserFromDTO(user, userDTO);
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
+    }
+
+    // Implementação do método convertFromDTO
+    private User convertFromDTO(UserDTO userDTO) {
+        return User.builder()
+                .firstName(userDTO.getFirstName())
+                .lastName(userDTO.getLastName())
+                .email(userDTO.getEmail())
+                .password(userDTO.getPassword()) // Adicione o campo de senha
+                .role(Role.valueOf(userDTO.getRole()))
+                 // Defina como ativo por padrão, se aplicável
+                .build();
     }
 
     private void updateUserFromDTO(User user, UserDTO userDTO) {

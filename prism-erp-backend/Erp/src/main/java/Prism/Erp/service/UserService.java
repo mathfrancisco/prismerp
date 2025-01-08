@@ -16,4 +16,7 @@ public interface UserService {
     List<UserDTO> findActiveUsers();
     List<UserDTO> findByRoles(List<String> roles);
     List<UserDTO> findByEmailPattern(String emailPattern);
+    UserDTO createUser(UserDTO userDTO);
+
+    void deleteUser(Long id);
 }

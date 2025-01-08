@@ -65,11 +65,7 @@
           >
             Edit
           </button>
-          <button
-            *ngIf="isAdmin"
-            (click)="deleteUser(user)"
-            class="text-red-600 hover:text-red-900"
-          >
+          <button *ngIf="isAdmin" type="button" (click)="deleteUser(user)" class="text-red-600 hover:text-red-900">
             Delete
           </button>
         </td>

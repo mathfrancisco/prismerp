@@ -1,9 +1,7 @@
-// features/users/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Page } from '../models/user.model';
-import { User } from '../models/user.model';
+import { Page, UserDTO, Role } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,38 +11,50 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(page: number = 0, size: number = 10): Observable<Page<User>> {
+  getUsers(page: number = 0, size: number = 10): Observable<Page<UserDTO>> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
-    return this.http.get<Page<User>>(this.API_URL, { params });
+    return this.http.get<Page<UserDTO>>(this.API_URL, { params });
   }
 
-  getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.API_URL}/${id}`);
+  getUserById(id: number): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${this.API_URL}/${id}`);
   }
 
-  updateUser(id: number, userData: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.API_URL}/${id}`, userData);
+  createUser(userDTO: UserDTO): Observable<UserDTO> {
+    return this.http.post<UserDTO>(this.API_URL, userDTO);
   }
 
-  getActiveUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.API_URL}/active`);
+  updateUser(id: number, userDTO: UserDTO): Observable<UserDTO> {
+    return this.http.put<UserDTO>(`${this.API_URL}/${id}`, userDTO);
   }
 
-  searchUsers(searchTerm: string): Observable<User[]> {
-    return this.http.get<User[]>(`${this.API_URL}/search`, {
-      params: new HttpParams().set('searchTerm', searchTerm)
-    });
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 
-  getUsersByRole(role: string): Observable<User[]> {
-    return this.http.get<User[]>(`${this.API_URL}/role/${role}`);
+  getActiveUsers(): Observable<UserDTO[]> {
+    return this.http.get<UserDTO[]>(`${this.API_URL}/active`);
   }
 
-  getUsersByRoles(roles: string[]): Observable<User[]> {
-    return this.http.get<User[]>(`${this.API_URL}/roles`, {
-      params: new HttpParams().set('roles', roles.join(','))
-    });
+  searchUsers(searchTerm: string): Observable<UserDTO[]> {
+    const params = new HttpParams().set('searchTerm', searchTerm);
+    return this.http.get<UserDTO[]>(`${this.API_URL}/search`, { params });
+  }
+
+  getUsersByRole(role: string): Observable<UserDTO[]> { // Use o enum Role aqui
+    return this.http.get<UserDTO[]>(`${this.API_URL}/role/${role}`);
+  }
+
+
+  getUsersByRoles(roles: Role[]): Observable<UserDTO[]> {
+    const params = new HttpParams().set('roles', roles.join(','));
+    return this.http.get<UserDTO[]>(`${this.API_URL}/roles`, { params });
+  }
+
+  getUsersByEmailPattern(emailPattern: string): Observable<UserDTO[]> {
+    const params = new HttpParams().set('emailPattern', emailPattern);
+    return this.http.get<UserDTO[]>(`${this.API_URL}/email-pattern`, { params });
   }
 }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../core/services/user.service';
-import { User } from '../../../core/models/user.model';
+import { UserDTO } from '../../../core/models/user.model';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, finalize, switchMap} from 'rxjs/operators';
 import {CommonModule, NgForOf, NgIf} from '@angular/common';
 
 @Component({
@@ -18,7 +18,7 @@ import {CommonModule, NgForOf, NgIf} from '@angular/common';
   styleUrl: './user-list.component.scss'
 })
 export class UserListComponent implements OnInit {
-  users: User[] = [];
+  users: UserDTO[] = [];
   roles = ['ADMIN', 'USER', 'MANAGER', 'ACCOUNTANT', 'SALES_REPRESENTATIVE'];
   searchControl = new FormControl('');
   roleFilter = new FormControl('');
@@ -81,11 +81,26 @@ export class UserListComponent implements OnInit {
     this.loadUsers();
   }
 
-  editUser(user: User): void {
+  editUser(userDTO: UserDTO): void {
     // Implement edit logic
   }
 
-  deleteUser(user: User): void {
-    // Implement delete logic
+  deleteUser(user: UserDTO): void {
+    if (confirm(`Are you sure you want to delete ${user.firstName} ${user.lastName}?`)) {
+      this.userService.deleteUser(user.id).pipe(
+        finalize(() => this.loadUsers()), // Recarrega a lista após a exclusão
+        switchMap(() => this.userService.getUsers(this.currentPage, this.pageSize))
+      ).subscribe({
+        next: (page) => {
+          this.users = page.content;
+          this.totalElements = page.totalElements;
+          this.totalPages = page.totalPages;
+        },
+        error: (error) => {
+          // Lide com o erro, exiba uma mensagem, etc.
+          console.error('Error deleting user:', error);
+        }
+      });
+    }
   }
 }

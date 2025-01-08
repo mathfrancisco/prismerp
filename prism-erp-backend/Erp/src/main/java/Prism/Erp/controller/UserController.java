@@ -61,4 +61,18 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getUsersByEmailPattern(@RequestParam String emailPattern) {
         return ResponseEntity.ok(userService.findByEmailPattern(emailPattern));
     }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')") // Autorização apenas para ADMIN
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userService.createUser(userDTO));
+    }
+
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // Autorização apenas para ADMIN
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -1,0 +1,10 @@
+.form-input {
+  @apply mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md;
+}
+.btn {
+  @apply font-bold py-2 px-4 rounded;
+}
+
+.btn-primary {
+  @apply bg-blue-500 hover:bg-blue-700 text-white;
+}
