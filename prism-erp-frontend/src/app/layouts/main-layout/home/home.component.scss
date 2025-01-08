@@ -2,6 +2,8 @@
   position: relative;
   overflow: hidden;
   max-width: 100%;
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0.7));
+  backdrop-filter: blur(10px);
 }
 
 .carousel-slide {
@@ -12,10 +14,7 @@
 .carousel-item {
   flex: 0 0 100%;
   min-width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 1rem;
 }
 
 .carousel-controls {
@@ -26,13 +25,24 @@
   display: flex;
   justify-content: space-between;
   transform: translateY(-50%);
-  padding: 0 10px;
+  padding: 0 1rem;
 }
 
 .carousel-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  color: #475569;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
 }
