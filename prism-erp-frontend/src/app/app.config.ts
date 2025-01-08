@@ -12,7 +12,7 @@ if (environment.production) {
   enableProdMode();
 }
 
-bootstrapApplication(AppComponent, {
+bootstrapApplication(AppComponent,{
   providers: [
     provideRouter(routes),
     importProvidersFrom(HttpClientModule),

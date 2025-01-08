@@ -3,14 +3,16 @@ import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user.model';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import {NgForOf} from '@angular/common';
+import {CommonModule, NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    CommonModule,
+    NgIf
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
