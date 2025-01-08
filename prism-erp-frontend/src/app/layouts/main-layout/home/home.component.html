@@ -34,7 +34,74 @@
                 <p class="text-gray-300">Cadastre usuários, clientes, fornecedores e funcionários e organize sua empresa.</p>
               </div>
             </div>
-            <!-- Additional carousel items following the same pattern -->
+           <!-- Carousel Items for Home Section -->
+<div class="carousel-slide" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+  <!-- Cliente -->
+  <div class="carousel-item">
+    <div class="bg-slate-700 p-6 rounded-lg w-full">
+      <div class="flex items-center mb-4">
+        <div class="bg-emerald-500 p-3 rounded-lg">
+          <fa-icon [icon]="['fas', 'users']" class="text-white text-xl"></fa-icon>
+        </div>
+        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Clientes</h3>
+      </div>
+      <p class="text-gray-300">Cadastro completo, histórico de interações e gestão eficiente de documentos dos seus clientes.</p>
+    </div>
+  </div>
+  
+  <!-- Funcionários -->
+  <div class="carousel-item">
+    <div class="bg-slate-700 p-6 rounded-lg w-full">
+      <div class="flex items-center mb-4">
+        <div class="bg-emerald-500 p-3 rounded-lg">
+          <fa-icon [icon]="['fas', 'user-tie']" class="text-white text-xl"></fa-icon>
+        </div>
+        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Funcionários</h3>
+      </div>
+      <p class="text-gray-300">Controle completo de funcionários, cargos e departamentos em uma única plataforma.</p>
+    </div>
+  </div>
+  
+  <!-- Vendas -->
+  <div class="carousel-item">
+    <div class="bg-slate-700 p-6 rounded-lg w-full">
+      <div class="flex items-center mb-4">
+        <div class="bg-emerald-500 p-3 rounded-lg">
+          <fa-icon [icon]="['fas', 'shopping-cart']" class="text-white text-xl"></fa-icon>
+        </div>
+        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Vendas</h3>
+      </div>
+      <p class="text-gray-300">Controle total do processo de vendas, desde o pedido até a entrega do produto.</p>
+    </div>
+  </div>
+  
+  <!-- Estoque -->
+  <div class="carousel-item">
+    <div class="bg-slate-700 p-6 rounded-lg w-full">
+      <div class="flex items-center mb-4">
+        <div class="bg-emerald-500 p-3 rounded-lg">
+          <fa-icon [icon]="['fas', 'warehouse']" class="text-white text-xl"></fa-icon>
+        </div>
+        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Estoque</h3>
+      </div>
+      <p class="text-gray-300">Controle eficiente de entrada e saída de produtos com alertas automáticos.</p>
+    </div>
+  </div>
+  
+  <!-- Faturamento -->
+  <div class="carousel-item">
+    <div class="bg-slate-700 p-6 rounded-lg w-full">
+      <div class="flex items-center mb-4">
+        <div class="bg-emerald-500 p-3 rounded-lg">
+          <fa-icon [icon]="['fas', 'file-invoice-dollar']" class="text-white text-xl"></fa-icon>
+        </div>
+        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Faturamento</h3>
+      </div>
+      <p class="text-gray-300">Emissão de notas fiscais e controle financeiro integrado ao seu negócio.</p>
+    </div>
+  </div>
+</div>
+
           </div>
           
           <div class="carousel-controls">
