@@ -17,6 +17,7 @@ import { ResetPasswordComponent } from './core/auth/reset-password/reset-passwor
 import { UserListComponent } from './features/users/user-list/user-list.component';
 import { UserDetailComponent } from './features/users/user-detail/user-detail.component';
 
+
 // Finance Components
 import { InvoicesComponent } from './features/finance/invoices/invoices.component';
 import { PaymentsComponent } from './features/finance/payments/payments.component';
@@ -47,51 +48,81 @@ import { QuotationsComponent } from './features/sales/quotations/quotations.comp
 
 // Dashboard Component
 import { DashboardComponent } from './features/dashboard/dashboard.component';
+import {CustomerDetailComponent} from './features/sales/customers/customer-detail/customer-detail.component';
+import {CustomerListComponent} from './features/sales/customers/customer-list/customer-list.component';
+import {ProductDetailComponent} from './features/inventory/products/product-detail/product-detail.component';
+import {ProductEditComponent} from './features/inventory/products/product-edit/product-edit.component';
+import {ProductCreateComponent} from './features/inventory/products/product-create/product-create.component';
+import {ProductListComponent} from './features/inventory/products/product-list/product-list.component';
+import {UserCreateComponent} from './features/users/user-create/user-create.component';
+import {CustomerFormComponent} from './features/sales/customers/customer-form/customer-form.component';
 
 export const routes: Routes = [
+
+  // Rotas protegidas pelo MainLayout
+  // Public Routes
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent, canActivate: [AuthGuard] },
+
+  // Protected Routes within MainLayout
   {
     path: '',
     component: MainLayoutComponent,
-    children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: DashboardComponent }, // Página inicial pública
-      // Outras páginas públicas podem ser adicionadas aqui
-    ],
-  },
-
-  // Protected Routes
-  {
-    path: '',
     canActivate: [AuthGuard],
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Redireciona para /dashboard
+      { path: 'dashboard', component: DashboardComponent },
+
+      // Users
       { path: 'users', component: UserListComponent },
+      { path: 'users/create', component: UserCreateComponent },
       { path: 'users/:id', component: UserDetailComponent },
+
+      // Products
+      { path: 'products', component: ProductListComponent },
+      { path: 'products/create', component: ProductCreateComponent },
+      { path: 'products/:id/edit', component: ProductEditComponent },
+      { path: 'products/:id', component: ProductDetailComponent },
+
+      // Customers
+      { path: 'customers', component: CustomerListComponent },
+      { path: 'customers/create', component: CustomerFormComponent },
+      { path: 'customers/:id/edit', component: CustomerFormComponent },
+      { path: 'customers/:id', component: CustomerDetailComponent },
+
+      // Finance
       { path: 'finance/invoices', component: InvoicesComponent },
       { path: 'finance/payments', component: PaymentsComponent },
       { path: 'finance/reports', component: FinanceReportsComponent },
+
+      // HR
       { path: 'hr/employees', component: EmployeesComponent },
       { path: 'hr/departments', component: DepartmentsComponent },
-      { path: 'inventory/products', component: ProductsComponent },
+
+      // Inventory
+      { path: 'inventory/products', component: ProductsComponent }, // Remova se já estiver listada acima
       { path: 'inventory/stock-levels', component: StockLevelsComponent },
       { path: 'inventory/transactions', component: TransactionsComponent },
+
+      // Purchase
       { path: 'purchase/orders', component: PurchaseOrdersComponent },
       { path: 'purchase/suppliers', component: SuppliersComponent },
+
+      // Reports
       { path: 'reports/sales', component: SalesReportComponent },
       { path: 'reports/inventory', component: InventoryReportComponent },
       { path: 'reports/finance', component: FinanceReportComponent },
+
+      // Sales
       { path: 'sales/orders', component: SalesOrdersComponent },
-      { path: 'sales/customers', component: CustomersComponent },
+      { path: 'sales/customers', component: CustomersComponent }, // Remova se já estiver listada acima
       { path: 'sales/quotations', component: QuotationsComponent },
-    ],
+    ]
   },
 
-  // Public Routes
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent },
-
-  // Wildcard Route for 404 - Not Found
+  // Wildcard Route
   { path: '**', redirectTo: '' },
 ];
 

@@ -1,6 +1,6 @@
 // product-detail.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import { ProductService } from '../../../../core/services/product.service';
 import { ProductDTO } from '../../../../core/models/product.model';
 import {CommonModule, Location} from '@angular/common';
@@ -9,7 +9,7 @@ import { finalize, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss'
 })
