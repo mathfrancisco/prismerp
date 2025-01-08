@@ -9,8 +9,9 @@ interface AuthResponse {
   user: {
     id: number;
     email: string;
-    name: string;
-    roles: string[];
+    firstName: string; // Use firstName
+    lastName: string;  // Use lastName
+    role: string;      // Use role
   };
 }
 
@@ -39,7 +40,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/login`, { email, password })
+    return this.http.post<AuthResponse>(`${this.API_URL}/authenticate`, { email, password })
       .pipe(
         tap(response => {
           localStorage.setItem('token', response.token);

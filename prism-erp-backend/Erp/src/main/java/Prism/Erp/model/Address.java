@@ -1,14 +1,13 @@
 package Prism.Erp.model;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Embeddable
 @Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address {

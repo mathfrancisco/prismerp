@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Product extends BaseEntity {
 
     @Column(nullable = false, unique = true)

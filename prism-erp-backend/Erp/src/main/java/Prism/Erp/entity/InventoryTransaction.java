@@ -2,10 +2,7 @@ package Prism.Erp.entity;
 
 import Prism.Erp.model.TransactionType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "inventory_transactions")
@@ -13,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class InventoryTransaction extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

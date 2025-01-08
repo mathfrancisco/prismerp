@@ -2,13 +2,12 @@ package Prism.Erp.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyDTO {

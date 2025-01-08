@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 @Table(name = "customers")
 @Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)

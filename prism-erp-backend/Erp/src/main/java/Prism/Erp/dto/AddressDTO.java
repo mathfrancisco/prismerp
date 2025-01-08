@@ -1,15 +1,15 @@
 package Prism.Erp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+
 public class AddressDTO {
     @NotBlank(message = "A rua é obrigatória")
     private String street;

@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class Employee extends BaseEntity {
 

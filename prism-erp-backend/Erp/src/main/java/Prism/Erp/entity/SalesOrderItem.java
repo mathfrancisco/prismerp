@@ -3,6 +3,8 @@ package Prism.Erp.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -10,6 +12,8 @@ import java.math.BigDecimal;
 @Table(name = "sales_order_items")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class SalesOrderItem extends BaseEntity {
 
     @ManyToOne

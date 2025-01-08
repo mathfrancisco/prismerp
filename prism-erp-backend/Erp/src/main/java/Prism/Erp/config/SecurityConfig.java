@@ -2,6 +2,7 @@ package Prism.Erp.config;
 
 import Prism.Erp.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,8 +24,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final UserDetailsService userDetailsService;
+    @Autowired // Injeção via @Autowired
+    private JwtAuthenticationFilter jwtAuthFilter;
+
+    @Autowired // Injeção via @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

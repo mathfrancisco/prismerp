@@ -9,6 +9,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class Department extends BaseEntity {
 

@@ -17,6 +17,8 @@ import Prism.Erp.model.EmploymentStatus;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class EmployeeDTO {
 
     private Long id;

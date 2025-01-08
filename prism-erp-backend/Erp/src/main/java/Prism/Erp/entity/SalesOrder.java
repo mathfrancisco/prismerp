@@ -4,6 +4,8 @@ import Prism.Erp.model.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +15,8 @@ import java.util.List;
 @Table(name = "sales_orders")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class SalesOrder extends BaseEntity {
 
     @Column(nullable = false, unique = true)
