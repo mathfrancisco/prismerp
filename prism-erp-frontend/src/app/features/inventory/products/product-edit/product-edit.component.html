@@ -1,0 +1,25 @@
+<!-- product-edit.component.html -->
+<div class="container mx-auto px-4 py-8" *ngIf="productForm">
+  <h1 class="text-2xl font-bold mb-4">Edit Product</h1>
+
+  <form [formGroup]="productForm" (ngSubmit)="updateProduct()">
+    <!-- Campos do formulário -->
+    <div>
+      <label for="code">Code:</label>
+      <input type="text" id="code" formControlName="code" class="form-input" required>
+    </div>
+
+
+<div class="mt-8">
+  <button type="button" (click)="goBack()" class="btn btn-secondary mr-4">Back</button>
+  <button type="submit" [disabled]="productForm.invalid || isLoading" class="btn btn-primary">Save Changes</button>
+</div>
+</form>
+
+<div *ngIf="isLoading" class="text-center mt-4">
+  Loading...
+</div>
+
+<div *ngIf="error" class="text-red-500 mt-4">{{ error }}</div>
+</div>
+

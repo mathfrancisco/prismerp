@@ -1,0 +1,23 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4">Create Product</h1>
+
+  <form *ngIf="productForm" [formGroup]="productForm" (ngSubmit)="createProduct()">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="code">Code:</label>
+        <input type="text" id="code" formControlName="code" class="form-input" required>
+        <div *ngIf="productForm.get('code')?.invalid && productForm.get('code')?.touched" class="text-red-500">Code is required.</div>
+      </div>
+
+    </div>
+    <button type="submit" [disabled]="productForm.invalid || isLoading" class="btn btn-primary">
+      Create Product
+    </button>
+  </form>
+
+  <div *ngIf="isLoading" class="text-center mt-4">
+    Loading...
+  </div>
+
+  <div *ngIf="error" class="text-red-500 mt-4">{{ error }}</div>
+</div>

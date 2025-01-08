@@ -1,9 +1,38 @@
+// customer.service.ts
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CustomerDTO } from '../models/customer.model'; // Importe o modelo
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
+  private readonly API_URL = 'http://localhost:8080/api/customers'; // URL da sua API
 
-  constructor() { }
+  constructor(private http: HttpClient) {}
+
+  getCustomers(page: number, size: number): Observable<any> { // Paginação
+    return this.http.get<any>(`${this.API_URL}?page=${page}&size=${size}`);
+  }
+
+  getCustomerById(id: number): Observable<CustomerDTO> {
+    return this.http.get<CustomerDTO>(`${this.API_URL}/${id}`);
+  }
+
+  createCustomer(customer: CustomerDTO): Observable<CustomerDTO> {
+    return this.http.post<CustomerDTO>(this.API_URL, customer);
+  }
+
+  updateCustomer(id: number, customer: CustomerDTO): Observable<CustomerDTO> {
+    return this.http.put<CustomerDTO>(`${this.API_URL}/${id}`, customer);
+  }
+
+  deleteCustomer(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
+  getByDocumentNumber(documentNumber: string): Observable<CustomerDTO> {
+    return this.http.get<CustomerDTO>(`${this.API_URL}/document/${documentNumber}`);
+  }
 }
