@@ -1,59 +1,62 @@
-<section id="benefits" class="py-12 bg-gray-100 relative overflow-hidden">
-  <div class="container mx-auto px-4 relative z-10">
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-      <span class="text-blue-500">Benefícios:</span> Potencialize seu negócio com Prism ERP
-    </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'rocket']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Aumento da Produtividade</h3>
+          <div class="bg-emerald-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-emerald-500/20 transition-colors duration-300">
+            <fa-icon [icon]="['fas', 'sync-alt']" class="text-3xl text-emerald-500"></fa-icon>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-4">Integrações</h3>
+          <ul class="space-y-3 mb-6 text-gray-300">
+            <li class="flex items-center">
+              <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+              APIs robustas
+            </li>
+            <li class="flex items-center">
+              <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+              Conexão com marketplace
+            </li>
+            <li class="flex items-center">
+              <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+              Plugins personalizáveis
+            </li>
+          </ul>
+          <button class="w-full bg-slate-700 hover:bg-emerald-500 text-white py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
+            <span>Explore mais</span>
+            <fa-icon [icon]="['fas', 'arrow-right']" class="ml-2 text-sm"></fa-icon>
+          </button>
         </div>
-        <p class="text-gray-600">Automatize tarefas e otimize processos para maior eficiência.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
       </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'chart-line']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Tomada de Decisões Estratégicas</h3>
+
+      <!-- Suporte -->
+      <div class="group relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+        <div class="bg-slate-800 rounded-xl p-6 hover:bg-slate-700 transition-all duration-300 transform hover:-translate-y-2 relative z-10">
+          <div class="bg-emerald-500/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-emerald-500/20 transition-colors duration-300">
+            <fa-icon [icon]="['fas', 'headset']" class="text-3xl text-emerald-500"></fa-icon>
+          </div>
+          <h3 class="text-xl font-semibold text-white mb-4">Suporte Dedicado</h3>
+          <ul class="space-y-3 mb-6 text-gray-300">
+            <li class="flex items-center">
+              <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+              Atendimento 24/7
+            </li>
+            <li class="flex items-center">
+              <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+              Equipe especializada
+            </li>
+            <li class="flex items-center">
+              <fa-icon [icon]="['fas', 'check']" class="text-emerald-500 mr-2"></fa-icon>
+              Treinamento incluso
+            </li>
+          </ul>
+          <button class="w-full bg-slate-700 hover:bg-emerald-500 text-white py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
+            <span>Explore mais</span>
+            <fa-icon [icon]="['fas', 'arrow-right']" class="ml-2 text-sm"></fa-icon>
+          </button>
         </div>
-        <p class="text-gray-600">Relatórios e análises para decisões mais informadas e assertivas.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'lock']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Segurança Reforçada</h3>
-        </div>
-        <p class="text-gray-600">Proteja seus dados com recursos avançados de segurança e controle de acesso.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'mobile-alt']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Acesso em Qualquer Lugar</h3>
-        </div>
-        <p class="text-gray-600">Acesse informações importantes de qualquer dispositivo, a qualquer hora.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'sync-alt']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Integrações</h3>
-        </div>
-        <p class="text-gray-600">Conecte-se com outras plataformas para expandir as funcionalidades do seu ERP.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-6 transform transition-transform hover:scale-105 flex flex-col justify-between">
-        <div class="flex items-center mb-4">
-          <fa-icon [icon]="['fas', 'headset']" class="text-4xl text-blue-500 mr-3"></fa-icon>
-          <h3 class="text-xl font-semibold text-gray-800">Suporte Dedicado</h3>
-        </div>
-        <p class="text-gray-600">Equipe de suporte pronta para auxiliar em suas dúvidas e necessidades.</p>
-        <button class="mt-4 bg-gray-100 hover:bg-gray-200 text-gray-600 py-2 px-4 rounded-lg transition-colors duration-200">Saiba mais</button>
       </div>
     </div>
   </div>
-  <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent to-gray-50 z-0"></div>
 
+  <!-- Background Elements -->
+  <div class="absolute inset-0 z-0">
+    <div class="absolute w-96 h-96 bg-emerald-500 rounded-full filter blur-[128px] opacity-10 -top-10 -left-10"></div>
+    <div class="absolute w-96 h-96 bg-emerald-500 rounded-full filter blur-[128px] opacity-10 -bottom-10 -right-10"></div>
+  </div>
 </section>
