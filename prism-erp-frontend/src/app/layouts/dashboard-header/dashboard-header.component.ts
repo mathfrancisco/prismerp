@@ -13,7 +13,7 @@ import {AuthService} from '../../core/auth/auth.service';
 export class DashboardHeaderComponent {
 
   constructor(private authService: AuthService) { }
-  
+
   menuItems = [
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/sales', label: 'Vendas' },
