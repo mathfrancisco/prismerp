@@ -1,11 +1,17 @@
-<header class="bg-gray-800 text-white p-4">
-  <nav class="flex justify-between items-center">
-    <div class="text-lg font-bold">Dashboard</div>
+<header class="bg-slate-900 text-white p-4">
+  <nav class="container mx-auto flex justify-between items-center">
+    <div class="text-lg font-bold">
+      <img src="assets/images/your_logo.png" alt="Your Logo" class="h-8 w-auto inline-block align-middle mr-2">
+      Dashboard
+    </div>
     <ul class="flex space-x-4">
-      <li><a routerLink="/dashboard" class="hover:underline">Dashboard</a></li>
-      <li><a routerLink="/sales" class="hover:underline">Vendas</a></li>
-      <li><a routerLink="/inventory" class="hover:underline">Estoque</a></li>
-      <li><a routerLink="/finance" class="hover:underline">Financeiro</a></li>
+      <li *ngFor="let item of menuItems">
+        <a [routerLink]="item.path" routerLinkActive="text-emerald-500"
+           class="hover:text-emerald-400 transition duration-200">{{ item.label }}</a>
+      </li>
+      <li>
+        <button (click)="logout()" class="hover:text-red-500 transition duration-200">Logout</button>
+      </li>
     </ul>
   </nav>
 </header>
