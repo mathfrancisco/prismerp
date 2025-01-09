@@ -1,10 +1,12 @@
-// orders.component.html
 <div class="container mx-auto px-4 py-8">
+  <!-- Loading Spinner -->
   <div *ngIf="loading" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
     <mat-spinner></mat-spinner>
   </div>
+
   <h1 class="text-2xl font-bold text-gray-800 mb-6">Sales Orders</h1>
 
+  <!-- Search Section -->
   <div class="flex justify-between items-center mb-4">
     <mat-form-field appearance="outline">
       <mat-label>Search by Order Number</mat-label>
@@ -17,34 +19,21 @@
     <button mat-raised-button color="primary" (click)="searchByOrderNumber()">Search</button>
   </div>
 
+  <!-- Orders Table -->
   <div class="bg-white shadow-md rounded-lg overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
       <tr>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Order Number
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Customer ID
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Total Amount
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Order Date
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Delivery Date
-        </th>
-        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Status
-        </th>
-        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Actions
-        </th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Number</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer ID</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery Date</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
       </tr>
       </thead>
-      <tbody>
+      <tbody class="bg-white divide-y divide-gray-200">
       <tr *ngFor="let order of orders">
         <td class="px-6 py-4 whitespace-nowrap">
           <div class="text-sm text-gray-900">{{ order.orderNumber }}</div>
@@ -62,15 +51,18 @@
           <div class="text-sm text-gray-500">{{ order.deliveryDate | date }}</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                          [class.bg-yellow-100]="order.status === orderStatuses.PENDING"
-                          [class.bg-blue-100]="order.status === orderStatuses.PROCESSING"
-                          [class.bg-green-100]="order.status === orderStatuses.SHIPPED || order.status === orderStatuses.DELIVERED"
-                          [class.bg-red-100]="order.status === orderStatuses.CANCELLED">
-                      {{ order.status }}
-                    </span>
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                  [class.bg-yellow-100]="order.status === orderStatuses.PENDING"
+                  [class.bg-blue-100]="order.status === orderStatuses.PROCESSING"
+                  [class.bg-green-100]="order.status === orderStatuses.SHIPPED || order.status === orderStatuses.DELIVERED"
+                  [class.bg-red-100]="order.status === orderStatuses.CANCELLED">
+              {{ order.status }}
+            </span>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <button mat-icon-button (click)="getOrder(order.id)">
+            <mat-icon>visibility</mat-icon>
+          </button>
           <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -87,10 +79,83 @@
     </table>
   </div>
 
+  <!-- Create New Order Form -->
+  <div class="mt-8 bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Create New Order</h2>
+    <form [formGroup]="orderForm" (ngSubmit)="createOrder()" class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Customer ID</mat-label>
+          <input matInput type="number" formControlName="customerId">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Order Date</mat-label>
+          <input matInput type="date" formControlName="orderDate">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Delivery Date</mat-label>
+          <input matInput type="date" formControlName="deliveryDate">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Total Amount</mat-label>
+          <input matInput type="number" formControlName="totalAmount">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let status of Object.values(orderStatuses)" [value]="status">
+              {{status}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Order Items Form Array -->
+      <div formArrayName="items" class="space-y-4">
+        <div *ngFor="let item of itemsFormArray.controls; let i=index" [formGroupName]="i"
+             class="grid grid-cols-3 gap-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Product ID</mat-label>
+            <input matInput type="number" formControlName="productId">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" formControlName="quantity">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Price</mat-label>
+            <input matInput type="number" formControlName="price">
+          </mat-form-field>
+
+          <button type="button" mat-icon-button color="warn" (click)="removeOrderItem(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex justify-between">
+        <button type="button" mat-raised-button (click)="addOrderItem()">
+          Add Item
+        </button>
+        <button type="submit" mat-raised-button color="primary" [disabled]="!orderForm.valid || loading">
+          Create Order
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Sales Chart -->
   <div class="mt-4">
     <canvas id="salesChart"></canvas>
   </div>
 
+  <!-- Pagination -->
   <mat-paginator
     [length]="totalElements"
     [pageSize]="pageSize"

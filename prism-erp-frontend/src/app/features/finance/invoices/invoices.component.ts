@@ -1,14 +1,16 @@
 // invoices.component.ts
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button'; // Importe o MatButtonModule
+import { MatButtonModule } from '@angular/material/button';
 import { InvoiceService } from '../../../core/services/invoice.service';
 import { InvoiceDTO, InvoiceStatus, InvoiceTaxCalculationDTO } from '../../../core/models/invoice.model';
 import { Page } from '../../../core/models/user.model';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-invoices',
@@ -31,6 +33,7 @@ export class InvoicesComponent implements OnInit {
   filterStatus: InvoiceStatus | '' = '';
   invoiceStatuses = Object.values(InvoiceStatus);
   discountForm: FormGroup;
+  searchForm: FormGroup;
 
   constructor(
     private invoiceService: InvoiceService,
@@ -38,6 +41,11 @@ export class InvoicesComponent implements OnInit {
   ) {
     this.discountForm = this.fb.group({
       discountPercentage: ['']
+    });
+    // Adicione o formulário de busca
+    this.searchForm = this.fb.group({
+      invoiceNumber: [''],
+      invoiceId: ['']
     });
   }
 
@@ -166,5 +174,54 @@ export class InvoicesComponent implements OnInit {
   clearMessages(): void {
     this.error = null;
     this.success = null;
+  }
+
+  searchByInvoiceNumber(): void {
+    const invoiceNumber = this.searchForm.get('invoiceNumber')?.value;
+    if (invoiceNumber) {
+      this.loading = true;
+      this.invoiceService.getByInvoiceNumber(invoiceNumber).subscribe({
+        next: (invoice) => {
+          this.invoices = [invoice];
+          this.totalElements = 1;
+          this.totalPages = 1;
+          this.currentPage = 0;
+          this.loading = false;
+          this.clearMessages();
+        },
+        error: (error) => {
+          this.error = 'Invoice not found';
+          this.loading = false;
+          this.loadInvoices(); // Recarrega a lista completa em caso de erro
+        }
+      });
+    }
+  }
+
+  searchById(): void {
+    const invoiceId = this.searchForm.get('invoiceId')?.value;
+    if (invoiceId) {
+      this.loading = true;
+      this.invoiceService.getInvoiceById(invoiceId).subscribe({
+        next: (invoice) => {
+          this.invoices = [invoice];
+          this.totalElements = 1;
+          this.totalPages = 1;
+          this.currentPage = 0;
+          this.loading = false;
+          this.clearMessages();
+        },
+        error: (error) => {
+          this.error = 'Invoice not found';
+          this.loading = false;
+          this.loadInvoices(); // Recarrega a lista completa em caso de erro
+        }
+      });
+    }
+  }
+
+  clearSearch(): void {
+    this.searchForm.reset();
+    this.loadInvoices();
   }
 }

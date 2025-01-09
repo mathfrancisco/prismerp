@@ -1,19 +1,20 @@
-// orders.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SalesService } from '../../../core/services/sales-order.service';
 import { SalesOrderDTO, OrderStatus, Page } from '../../../core/models/sales-order.model';
+import { SalesOrderItemDTO } from '../../../core/models/sales-order-item.model';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms'; // Importe o FormsModule
-import { MatInputModule } from '@angular/material/input'; // Importe o MatInputModule
-import { MatFormFieldModule } from '@angular/material/form-field'; // Importe o MatFormFieldModule
-import { MatSelectModule } from '@angular/material/select'; // Importe o MatSelectModule
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // Importe para o spinner
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { Chart, registerables } from 'chart.js';
-import {MatPaginator} from '@angular/material/paginator';
-
+import { MatPaginator } from '@angular/material/paginator';
+import { OrdersDetailsComponent } from '../orders-details/orders-details.component';
 
 Chart.register(...registerables);
 
@@ -25,13 +26,14 @@ Chart.register(...registerables);
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
-    FormsModule, // Adicione o FormsModule
-    MatInputModule, // Adicione o MatInputModule
-    MatFormFieldModule, // Adicione o MatFormFieldModule
-    MatSelectModule, // Adicione o MatSelectModule
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
     MatProgressSpinnerModule,
     MatPaginator,
-    // Adicione o MatProgressSpinnerModule
+    MatDialogModule
   ],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss']
@@ -45,9 +47,24 @@ export class OrdersComponent implements OnInit {
   totalPages = 0;
   loading = false;
   salesChart: Chart | null = null;
-  orderNumberSearch: string = '';
+  orderNumberSearch = '';
+  selectedOrder: SalesOrderDTO | null = null;
+  orderForm: FormGroup;
 
-  constructor(private salesService: SalesService) {}
+  constructor(
+    private salesService: SalesService,
+    private fb: FormBuilder,
+    private dialog: MatDialog
+  ) {
+    this.orderForm = this.fb.group({
+      customerId: ['', Validators.required],
+      orderDate: ['', Validators.required],
+      deliveryDate: [''],
+      totalAmount: ['', [Validators.required, Validators.min(0)]],
+      status: [OrderStatus.PENDING],
+      items: this.fb.array([])
+    });
+  }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -56,7 +73,7 @@ export class OrdersComponent implements OnInit {
 
   loadOrders(page: number = this.currentPage): void {
     this.loading = true;
-    this.salesService.getCustomerOrders(1, page, this.pageSize).subscribe({ //customerId: number,
+    this.salesService.getCustomerOrders(1, page, this.pageSize).subscribe({
       next: (response: Page<SalesOrderDTO>) => {
         this.orders = response.content;
         this.totalElements = response.totalElements;
@@ -130,7 +147,7 @@ export class OrdersComponent implements OnInit {
       this.loading = true;
       this.salesService.getByOrderNumber(this.orderNumberSearch).subscribe({
         next: (order) => {
-          this.orders = [order]; // Exibe apenas o pedido encontrado
+          this.orders = [order];
           this.totalElements = 1;
           this.totalPages = 1;
           this.currentPage = 0;
@@ -142,11 +159,77 @@ export class OrdersComponent implements OnInit {
         }
       });
     } else {
-      this.loadOrders(); // Volta para a lista completa se a busca estiver vazia
+      this.loadOrders();
     }
   }
 
+  createOrder(): void {
+    if (this.orderForm.valid) {
+      this.loading = true;
+      const orderData = this.orderForm.value;
 
+      this.salesService.createOrder(orderData).subscribe({
+        next: (newOrder) => {
+          this.orders.unshift(newOrder);
+          this.orderForm.reset();
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error creating order:', error);
+          this.loading = false;
+        }
+      });
+    }
+  }
+
+  getOrder(id: number): void {
+    this.loading = true;
+    this.salesService.getOrder(id).subscribe({
+      next: (order) => {
+        this.selectedOrder = order;
+        this.loading = false;
+        this.openOrderDetails(order);
+      },
+      error: (error) => {
+        console.error('Error fetching order:', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  openOrderDetails(order: SalesOrderDTO): void {
+    const dialogRef = this.dialog.open(OrdersDetailsComponent, {
+      width: '600px',
+      data: order
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadOrders();
+      }
+    });
+  }
+
+  addOrderItem(): void {
+    const items = this.orderForm.get('items') as FormArray;
+    items.push(this.createOrderItemFormGroup());
+  }
+
+  removeOrderItem(index: number): void {
+    const items = this.orderForm.get('items') as FormArray;
+    items.removeAt(index);
+  }
+
+  private createOrderItemFormGroup(): FormGroup {
+    return this.fb.group({
+      productId: ['', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      price: ['', [Validators.required, Validators.min(0)]]
+    });
+  }
+
+  get itemsFormArray() {
+    return this.orderForm.get('items') as FormArray;
+  }
   protected readonly Object = Object;
 }
-
