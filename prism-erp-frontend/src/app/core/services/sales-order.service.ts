@@ -2,41 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {OrderStatus, SalesOrderDTO} from '../models/sales-order.model';
+import {Page} from '../models/user.model';
 
-export interface SalesOrderDTO {
-  id: number;
-  orderNumber: string;
-  customerId: number;
-  status: OrderStatus;
-  totalAmount: number;
-  orderDate: string;
-  deliveryDate: string;
-  items: SalesOrderItemDTO[];
-}
 
-export interface SalesOrderItemDTO {
-  id: number;
-  productId: number;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-}
-
-export enum OrderStatus {
-  PENDING = 'PENDING',
-  PROCESSING = 'PROCESSING',
-  SHIPPED = 'SHIPPED',
-  DELIVERED = 'DELIVERED',
-  CANCELLED = 'CANCELLED'
-}
-
-export interface Page<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-}
 
 @Injectable({
   providedIn: 'root'

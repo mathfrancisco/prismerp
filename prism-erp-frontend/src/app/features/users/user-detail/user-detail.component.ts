@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../core/auth/auth.service';
+import { UserService} from '../../../core/services/userservice';
 import { UserDTO } from '../../../core/models/user.model';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { finalize } from 'rxjs/operators';
@@ -27,7 +27,7 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authservice: AuthService,
+    private userService: UserService,
     private fb: FormBuilder,
     private location: Location // Injete o Location
   ) {}
@@ -41,7 +41,7 @@ export class UserDetailComponent implements OnInit {
 
   loadUser(): void {
     this.isLoading = true;
-    this.authservice.getUserById(this.userId).pipe(
+    this.userService.getUserById(this.userId).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: (user: UserDTO) => {
@@ -75,7 +75,7 @@ export class UserDetailComponent implements OnInit {
       ...this.userForm.value
     };
 
-    this.authservice.updateUser(this.userId, updatedUser).pipe(
+    this.userService.updateUser(this.userId, updatedUser).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: (user: UserDTO) => {

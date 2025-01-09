@@ -65,7 +65,7 @@ export class ResetPasswordComponent implements OnInit {
 
     const { password } = this.resetForm.value;
 
-    this.authService.resetPassword(this.token, password).subscribe({
+    this.authService.resetPassword({ token: this.token, newPassword: password }).subscribe({
       next: () => {
         this.isSuccess = true;
         this.resetForm.reset();

@@ -1,9 +1,6 @@
 package Prism.Erp.controller;
 
-import Prism.Erp.entity.AuthenticationRequest;
-import Prism.Erp.entity.AuthenticationResponse;
-import Prism.Erp.entity.ForgotPasswordRequest;
-import Prism.Erp.entity.RegisterRequest;
+import Prism.Erp.entity.*;
 import Prism.Erp.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +33,17 @@ public class AuthController {
             return ResponseEntity.badRequest().body(e.getMessage()); // Ou um DTO de erro
         }
     }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) { // Recebe o objeto request
+        try {
+            authenticationService.resetPassword(request.getToken(), request.getNewPassword());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage()); // Ou um DTO de erro
+        }
+    }
+
 
 }
 

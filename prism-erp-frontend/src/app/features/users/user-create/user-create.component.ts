@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { AuthService } from '../../../core/auth/auth.service';
+import { UserService} from '../../../core/services/userservice';
 import { UserDTO, Role } from '../../../core/models/user.model';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class UserCreateComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {
     this.userForm = this.fb.group({
@@ -42,7 +42,7 @@ export class UserCreateComponent {
     this.isLoading = true;
     const newUser: UserDTO = this.userForm.value;
 
-    this.authService.createUser(newUser).pipe(
+    this.userService.createUser(newUser).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: () => {

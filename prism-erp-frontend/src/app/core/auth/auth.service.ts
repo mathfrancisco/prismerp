@@ -71,11 +71,12 @@ export class AuthService {
     );
   }
 
-  resetPassword( request: ResetPasswordRequest): Observable<any> { // Use o tipo correto
-    return this.http.post(`${this.API_URL}/reset-password`, request).pipe(
+  resetPassword(request: ResetPasswordRequest): Observable<any> {
+    return this.http.post(`${this.API_URL}/reset-password`, request).pipe( // Envia o objeto request
       catchError(this.handleError)
     );
   }
+
 
   isAuthenticated(): Observable<boolean> {
     return this.isAuthenticatedSubject.asObservable();

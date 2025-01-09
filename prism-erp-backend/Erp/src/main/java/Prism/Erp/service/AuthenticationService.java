@@ -74,4 +74,8 @@ public class AuthenticationService {
 
     public void forgotPassword(String email) {
     }
+
+    public void resetPassword(String token, String newPassword) {
+
+    }
 }
