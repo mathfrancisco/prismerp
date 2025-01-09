@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 interface Activity {
   id: number;
@@ -7,15 +8,15 @@ interface Activity {
   description: string;
   timestamp: string;
   status: 'completed' | 'pending' | 'in-progress';
-  icon: string;
+  icon: string; // Propriedade para o ícone Font Awesome
 }
 
 @Component({
   selector: 'app-activity-summary',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './activity-summary.component.html',
-  styleUrl: './activity-summary.component.scss'
+  styleUrls: ['./activity-summary.component.scss']
 })
 export class ActivitySummaryComponent implements OnInit {
   activities: Activity[] = [
@@ -25,7 +26,7 @@ export class ActivitySummaryComponent implements OnInit {
       description: 'New sale order #1234 received',
       timestamp: '5 minutes ago',
       status: 'completed',
-      icon: 'bi bi-cart-check'
+      icon: 'fa-cart-arrow-down'
     },
     {
       id: 2,
@@ -33,7 +34,7 @@ export class ActivitySummaryComponent implements OnInit {
       description: 'Inventory update: 50 items added',
       timestamp: '1 hour ago',
       status: 'completed',
-      icon: 'bi bi-box-seam'
+      icon: 'fa-boxes-stacked'
     },
     {
       id: 3,
@@ -41,7 +42,7 @@ export class ActivitySummaryComponent implements OnInit {
       description: 'New customer registration',
       timestamp: '2 hours ago',
       status: 'completed',
-      icon: 'bi bi-person-plus'
+      icon: 'fa-user-plus'
     },
     {
       id: 4,
@@ -49,7 +50,7 @@ export class ActivitySummaryComponent implements OnInit {
       description: 'Monthly report generation',
       timestamp: '3 hours ago',
       status: 'in-progress',
-      icon: 'bi bi-file-earmark-text'
+      icon: 'fa-file-lines'
     },
     {
       id: 5,
@@ -57,15 +58,16 @@ export class ActivitySummaryComponent implements OnInit {
       description: 'Low stock alert: Product XYZ',
       timestamp: '4 hours ago',
       status: 'pending',
-      icon: 'bi bi-exclamation-triangle'
+      icon: 'fa-triangle-exclamation'
     }
   ];
 
+
   getIconClass(type: string): string {
-    const baseClasses = 'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center';
+    const baseClasses = 'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-lg';
     switch (type) {
       case 'sale':
-        return `${baseClasses} bg-green-100 text-green-600`;
+        return `${baseClasses} bg-emerald-100 text-emerald-600`;
       case 'inventory':
         return `${baseClasses} bg-blue-100 text-blue-600`;
       case 'customer':
@@ -79,10 +81,11 @@ export class ActivitySummaryComponent implements OnInit {
     }
   }
 
+
   getStatusClass(status: string): string {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-emerald-100 text-emerald-800';
       case 'in-progress':
         return 'bg-yellow-100 text-yellow-800';
       case 'pending':
@@ -94,3 +97,4 @@ export class ActivitySummaryComponent implements OnInit {
 
   ngOnInit(): void {}
 }
+
