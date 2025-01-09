@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {RouterModule, RouterOutlet} from '@angular/router';
+import {RouterModule} from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
 import { FooterComponent } from '../footer/footer.component';
 import {HomeComponent} from './home/home.component';
 import {ServicesComponent} from './services/services.component';
@@ -14,8 +13,6 @@ import {AboutComponent} from './about/about.component';
   standalone: true,
   imports: [
     HeaderComponent,
-    SidebarComponent,
-    RouterOutlet,
     FooterComponent,
     RouterModule,
     CommonModule,

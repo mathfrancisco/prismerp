@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faEnvelope, faStar, faUsers, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-about',
@@ -11,6 +11,6 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 })
 export class AboutComponent {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faEnvelope);
+    library.addIcons(faEnvelope, faClock, faStar, faUsers, faCheckCircle);
   }
 }

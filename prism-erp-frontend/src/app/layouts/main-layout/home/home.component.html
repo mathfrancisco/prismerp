@@ -1,4 +1,3 @@
-<!-- Template -->
 <section id="home" class="bg-slate-900 py-20 md:py-32 relative overflow-hidden">
   <div class="container mx-auto px-4 md:px-0 relative z-10">
     <!-- Hero Section -->
@@ -19,96 +18,30 @@
           </button>
         </div>
       </div>
-      
+
       <div class="md:w-1/2 relative">
         <div class="carousel-container bg-slate-800 rounded-lg p-6 shadow-xl">
-          <div class="carousel-slide" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
-            <div class="carousel-item">
-              <div class="bg-slate-700 p-6 rounded-lg w-full">
-                <div class="flex items-center mb-4">
-                  <div class="bg-emerald-500 p-3 rounded-lg">
-                    <fa-icon [icon]="['fas', 'users']" class="text-white text-xl"></fa-icon>
+          <div class="carousel-wrapper overflow-hidden">
+            <div class="carousel-slide flex transition-transform duration-500" [style.transform]="'translateX(-' + (currentIndex * 100) + '%)'">
+              <div *ngFor="let item of carouselItems" class="carousel-item flex-shrink-0 w-full">
+                <div class="bg-slate-700 p-6 rounded-lg">
+                  <div class="flex items-center mb-4">
+                    <div class="bg-emerald-500 p-3 rounded-lg">
+                      <fa-icon [icon]="['fas', item.icon]" class="text-white text-xl"></fa-icon>
+                    </div>
+                    <h3 class="text-xl font-semibold ml-4 text-white">{{ item.title }}</h3>
                   </div>
-                  <h3 class="text-xl font-semibold ml-4 text-white">Cadastro</h3>
+                  <p class="text-gray-300">{{ item.description }}</p>
                 </div>
-                <p class="text-gray-300">Cadastre usuários, clientes, fornecedores e funcionários e organize sua empresa.</p>
               </div>
             </div>
-           <!-- Carousel Items for Home Section -->
-<div class="carousel-slide" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
-  <!-- Cliente -->
-  <div class="carousel-item">
-    <div class="bg-slate-700 p-6 rounded-lg w-full">
-      <div class="flex items-center mb-4">
-        <div class="bg-emerald-500 p-3 rounded-lg">
-          <fa-icon [icon]="['fas', 'users']" class="text-white text-xl"></fa-icon>
-        </div>
-        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Clientes</h3>
-      </div>
-      <p class="text-gray-300">Cadastro completo, histórico de interações e gestão eficiente de documentos dos seus clientes.</p>
-    </div>
-  </div>
-  
-  <!-- Funcionários -->
-  <div class="carousel-item">
-    <div class="bg-slate-700 p-6 rounded-lg w-full">
-      <div class="flex items-center mb-4">
-        <div class="bg-emerald-500 p-3 rounded-lg">
-          <fa-icon [icon]="['fas', 'user-tie']" class="text-white text-xl"></fa-icon>
-        </div>
-        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Funcionários</h3>
-      </div>
-      <p class="text-gray-300">Controle completo de funcionários, cargos e departamentos em uma única plataforma.</p>
-    </div>
-  </div>
-  
-  <!-- Vendas -->
-  <div class="carousel-item">
-    <div class="bg-slate-700 p-6 rounded-lg w-full">
-      <div class="flex items-center mb-4">
-        <div class="bg-emerald-500 p-3 rounded-lg">
-          <fa-icon [icon]="['fas', 'shopping-cart']" class="text-white text-xl"></fa-icon>
-        </div>
-        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Vendas</h3>
-      </div>
-      <p class="text-gray-300">Controle total do processo de vendas, desde o pedido até a entrega do produto.</p>
-    </div>
-  </div>
-  
-  <!-- Estoque -->
-  <div class="carousel-item">
-    <div class="bg-slate-700 p-6 rounded-lg w-full">
-      <div class="flex items-center mb-4">
-        <div class="bg-emerald-500 p-3 rounded-lg">
-          <fa-icon [icon]="['fas', 'warehouse']" class="text-white text-xl"></fa-icon>
-        </div>
-        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Estoque</h3>
-      </div>
-      <p class="text-gray-300">Controle eficiente de entrada e saída de produtos com alertas automáticos.</p>
-    </div>
-  </div>
-  
-  <!-- Faturamento -->
-  <div class="carousel-item">
-    <div class="bg-slate-700 p-6 rounded-lg w-full">
-      <div class="flex items-center mb-4">
-        <div class="bg-emerald-500 p-3 rounded-lg">
-          <fa-icon [icon]="['fas', 'file-invoice-dollar']" class="text-white text-xl"></fa-icon>
-        </div>
-        <h3 class="text-xl font-semibold ml-4 text-white">Gestão de Faturamento</h3>
-      </div>
-      <p class="text-gray-300">Emissão de notas fiscais e controle financeiro integrado ao seu negócio.</p>
-    </div>
-  </div>
-</div>
-
           </div>
-          
-          <div class="carousel-controls">
-            <button (click)="prevSlide()" class="carousel-button bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full">
+
+          <div class="carousel-controls absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between px-4">
+            <button (click)="prevSlide()" class="carousel-button bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center transition-colors duration-300">
               <fa-icon [icon]="['fas', 'chevron-left']"></fa-icon>
             </button>
-            <button (click)="nextSlide()" class="carousel-button bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full">
+            <button (click)="nextSlide()" class="carousel-button bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center transition-colors duration-300">
               <fa-icon [icon]="['fas', 'chevron-right']"></fa-icon>
             </button>
           </div>
@@ -120,14 +53,13 @@
     <div class="mt-20">
       <h2 class="text-3xl font-bold text-white text-center mb-12">Por que escolher nossa gestão?</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-slate-800 p-6 rounded-lg hover:bg-slate-700 transition duration-300">
+        <div *ngFor="let feature of features" class="bg-slate-800 p-6 rounded-lg hover:bg-slate-700 transition duration-300">
           <div class="bg-emerald-500 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-            <fa-icon [icon]="['fas', 'chart-line']" class="text-white text-xl"></fa-icon>
+            <fa-icon [icon]="['fas', feature.icon]" class="text-white text-xl"></fa-icon>
           </div>
-          <h3 class="text-xl font-semibold text-white mb-3">Controle financeiro</h3>
-          <p class="text-gray-300">Cadastro de contas a pagar e a receber, com análises detalhadas e relatórios.</p>
+          <h3 class="text-xl font-semibold text-white mb-3">{{ feature.title }}</h3>
+          <p class="text-gray-300">{{ feature.description }}</p>
         </div>
-        <!-- Add more feature cards following the same pattern -->
       </div>
     </div>
   </div>

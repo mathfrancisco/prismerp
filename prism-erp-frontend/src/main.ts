@@ -1,11 +1,10 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
-import { provideRouter } from '@angular/router';
-import { importProvidersFrom } from '@angular/core';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-
 import { environment } from './environment/environment';
 import { AuthInterceptor } from './app/core/interceptors/authinterceptor';
 
@@ -13,10 +12,13 @@ if (environment.production) {
   enableProdMode();
 }
 
-bootstrapApplication(AppComponent, {
+const appConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptors([AuthInterceptor])),
-    // Outros provedores
-  ],
-}).catch((err) => console.error(err));
+    provideAnimations(),
+  ]
+};
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch(err => console.error('Error bootstrapping application:', err));
