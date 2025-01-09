@@ -1,19 +1,19 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
-import {MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIcon } from '@angular/material/icon';
 import { DepartmentService } from '../../../core/services/department.service';
 import { DepartmentDTO } from '../../../core/models/department.model';
 import { Page } from '../../../core/models/user.model';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import {MatIcon} from '@angular/material/icon';
-import {DepartmentDialogComponent} from './departaments-dialog/departaments-dialog.component';
+import { DepartmentDialogComponent } from './departaments-dialog/departaments-dialog.component'
 
 @Component({
   selector: 'app-departments',
@@ -36,12 +36,17 @@ import {DepartmentDialogComponent} from './departaments-dialog/departaments-dial
   styleUrls: ['./departments.component.scss']
 })
 export class DepartmentsComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
   departments: DepartmentDTO[] = [];
   displayedColumns: string[] = ['code', 'name', 'description', 'managerId', 'actions'];
   currentPage = 0;
   pageSize = 10;
   totalElements = 0;
   loading = false;
+  searchCode: string = '';
+  selectedDepartment: DepartmentDTO | null = null;
 
   constructor(
     private departmentService: DepartmentService,
@@ -63,16 +68,48 @@ export class DepartmentsComponent implements OnInit {
           this.loading = false;
         },
         error: (error) => {
-          this.snackBar.open('Error loading departments', 'Close', { duration: 3000 });
+          this.showError('Error loading departments');
           this.loading = false;
         }
       });
   }
 
+  applyFilter(): void {
+    if (this.searchCode) {
+      this.departmentService.getDepartmentByCode(this.searchCode)
+        .subscribe({
+          next: (department) => {
+            this.departments = department ? [department] : [];
+            this.totalElements = this.departments.length;
+          },
+          error: () => {
+            this.departments = [];
+            this.totalElements = 0;
+          }
+        });
+    } else {
+      this.loadDepartments();
+    }
+  }
+
   openDialog(department?: DepartmentDTO): void {
+    if (department) {
+      this.departmentService.getDepartmentById(department.id)
+        .subscribe({
+          next: (fullDepartment) => {
+            this.openDialogWithData(fullDepartment);
+          },
+          error: () => this.showError('Error loading department details')
+        });
+    } else {
+      this.openDialogWithData({} as DepartmentDTO);
+    }
+  }
+
+  private openDialogWithData(department: DepartmentDTO): void {
     const dialogRef = this.dialog.open(DepartmentDialogComponent, {
       width: '400px',
-      data: department || {}
+      data: department
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -91,11 +128,9 @@ export class DepartmentsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.loadDepartments();
-          this.snackBar.open('Department created successfully', 'Close', { duration: 3000 });
+          this.showSuccess('Department created successfully');
         },
-        error: (error) => {
-          this.snackBar.open('Error creating department', 'Close', { duration: 3000 });
-        }
+        error: () => this.showError('Error creating department')
       });
   }
 
@@ -104,11 +139,9 @@ export class DepartmentsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.loadDepartments();
-          this.snackBar.open('Department updated successfully', 'Close', { duration: 3000 });
+          this.showSuccess('Department updated successfully');
         },
-        error: (error) => {
-          this.snackBar.open('Error updating department', 'Close', { duration: 3000 });
-        }
+        error: () => this.showError('Error updating department')
       });
   }
 
@@ -118,11 +151,9 @@ export class DepartmentsComponent implements OnInit {
         .subscribe({
           next: () => {
             this.loadDepartments();
-            this.snackBar.open('Department deleted successfully', 'Close', { duration: 3000 });
+            this.showSuccess('Department deleted successfully');
           },
-          error: (error) => {
-            this.snackBar.open('Error deleting department', 'Close', { duration: 3000 });
-          }
+          error: () => this.showError('Error deleting department')
         });
     }
   }
@@ -132,6 +163,19 @@ export class DepartmentsComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.loadDepartments();
   }
-}
 
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['success-snackbar']
+    });
+  }
+
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
+  }
+}
 
