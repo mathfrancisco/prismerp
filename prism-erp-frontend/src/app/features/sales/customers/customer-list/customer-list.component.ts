@@ -1,5 +1,5 @@
 // customer-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { CustomerService } from '../../../../core/services/customer.service';
 import { CustomerDTO } from '../../../../core/models/customer.model';
 import { finalize } from 'rxjs/operators';
@@ -23,6 +23,7 @@ export class CustomerListComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
   searchTerm: string = '';
+  @Output() selectCustomer = new EventEmitter<CustomerDTO>();
 
 
   constructor(private customerService: CustomerService) {}

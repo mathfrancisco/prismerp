@@ -1,0 +1,52 @@
+// transactions.component.scss
+:host {
+  display: block;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #dc3545;
+}
+
+.transaction-type {
+  &-INBOUND {
+    @apply bg-green-100 text-green-800;
+  }
+
+  &-OUTBOUND {
+    @apply bg-red-100 text-red-800;
+  }
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+table {
+  th, td {
+    vertical-align: middle;
+  }
+}
+
+.truncate-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

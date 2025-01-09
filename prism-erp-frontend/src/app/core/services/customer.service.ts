@@ -1,23 +1,29 @@
 // customer.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CustomerDTO } from '../models/customer.model'; // Importe o modelo
+import { CustomerDTO } from '../models/customer.model';
+import {environment} from '../../../environment/environment'; // Importe o modelo
+import { Page } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  private readonly API_URL = 'http://localhost:8080/api/customers'; // URL da sua API
+  private readonly API_URL = `${environment.apiUrl}/api/v1/customers`;
 
   constructor(private http: HttpClient) {}
 
-  getCustomers(page: number, size: number, searchTerm: string = ''): Observable<any> {
-    let url = `${this.API_URL}?page=${page}&size=${size}`;
+  getCustomers(page: number, size: number, searchTerm?: string): Observable<Page<CustomerDTO>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
     if (searchTerm) {
-      url += `&searchTerm=${searchTerm}`; // Adiciona o termo de busca à URL
+      params = params.set('search', searchTerm);
     }
-    return this.http.get<any>(url);
+
+    return this.http.get<Page<CustomerDTO>>(this.API_URL, { params });
   }
 
   getCustomerById(id: number): Observable<CustomerDTO> {
@@ -34,9 +40,5 @@ export class CustomerService {
 
   deleteCustomer(id: number): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
-  }
-
-  getByDocumentNumber(documentNumber: string): Observable<CustomerDTO> {
-    return this.http.get<CustomerDTO>(`${this.API_URL}/document/${documentNumber}`);
   }
 }

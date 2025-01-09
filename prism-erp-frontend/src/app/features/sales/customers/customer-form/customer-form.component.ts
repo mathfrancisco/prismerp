@@ -14,6 +14,7 @@ import {CommonModule} from '@angular/common';
 export class CustomerFormComponent implements OnInit {
   @Input() customer: CustomerDTO | null = null;
   @Output() customerSubmit = new EventEmitter<CustomerDTO>();
+  @Output() cancel = new EventEmitter<void>();
   customerForm!: FormGroup;
 
   constructor(private fb: FormBuilder) {}

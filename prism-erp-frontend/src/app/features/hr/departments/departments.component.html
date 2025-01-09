@@ -1,1 +1,58 @@
-<p>departments works!</p>
+<div class="p-4">
+  <div class="flex justify-between mb-4">
+    <h1 class="text-2xl">Departments</h1>
+    <button mat-raised-button color="primary" (click)="openDialog()">
+      Add Department
+    </button>
+  </div>
+
+  <mat-table [dataSource]="departments" class="mat-elevation-z8">
+    <!-- Code Column -->
+    <ng-container matColumnDef="code">
+      <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.code}} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.description || 'N/A'}} </mat-cell>
+    </ng-container>
+
+    <!-- Manager ID Column -->
+    <ng-container matColumnDef="managerId">
+      <mat-header-cell *matHeaderCellDef> Manager ID </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.managerId || 'N/A'}} </mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="openDialog(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteDepartment(element.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator
+    [length]="totalElements"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="onPageChange($event)"
+    aria-label="Select page">
+  </mat-paginator>
+</div>

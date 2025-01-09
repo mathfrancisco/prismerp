@@ -1,5 +1,5 @@
 // customer-detail.component.ts
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import { CustomerService } from '../../../../core/services/customer.service';
 import { CustomerDTO } from '../../../../core/models/customer.model';
@@ -14,9 +14,10 @@ import { finalize, switchMap } from 'rxjs/operators';
   styleUrls: ['./customer-detail.component.scss']
 })
 export class CustomerDetailComponent implements OnInit {
-  customer: CustomerDTO | undefined;
   isLoading = false;
   error: string | null = null;
+  @Input() customer!: CustomerDTO | null;
+  @Output() back = new EventEmitter<void>();
 
   constructor(
     private route: ActivatedRoute,
