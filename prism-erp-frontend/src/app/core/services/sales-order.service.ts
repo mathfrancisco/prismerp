@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {OrderStatus, SalesOrderDTO} from '../models/sales-order.model';
+
 import {Page} from '../models/user.model';
 
 
@@ -23,7 +24,7 @@ export class SalesService {
     return this.http.get<SalesOrderDTO>(`${this.API_URL}/${id}`);
   }
 
-  updateStatus(id: number, status: OrderStatus): Observable<SalesOrderDTO> {
+  updateStatus(id: number, status: string): Observable<SalesOrderDTO> {
     return this.http.put<SalesOrderDTO>(
       `${this.API_URL}/${id}/status`,
       null,

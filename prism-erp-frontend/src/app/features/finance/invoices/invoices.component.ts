@@ -3,14 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button'; // Importe o MatButtonModule
 import { InvoiceService } from '../../../core/services/invoice.service';
 import { InvoiceDTO, InvoiceStatus, InvoiceTaxCalculationDTO } from '../../../core/models/invoice.model';
 import { Page } from '../../../core/models/user.model';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-invoices',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, MatMenuTrigger, MatMenu, MatMenuItem, MatButtonModule, MatProgressSpinner],
   templateUrl: './invoices.component.html',
   styleUrls: ['./invoices.component.scss']
 })
@@ -79,7 +82,7 @@ export class InvoicesComponent implements OnInit {
     });
   }
 
-  updateStatus(invoice: InvoiceDTO, newStatus: InvoiceStatus): void {
+  updateStatus(invoice: InvoiceDTO, newStatus: string): void {
     this.loading = true;
     this.invoiceService.updateInvoiceStatus(invoice.id, newStatus).subscribe({
       next: (updatedInvoice) => {
@@ -141,8 +144,8 @@ export class InvoicesComponent implements OnInit {
     }
   }
 
-  onStatusFilterChange(status: InvoiceStatus | ''): void {
-    this.filterStatus = status;
+  onStatusFilterChange(status: string | null): void { // Aceite string | null
+    this.filterStatus = status === '' || status === null ? '' : status as InvoiceStatus; // Converta para InvoiceStatus se válido
     this.currentPage = 0;
     this.loadInvoices(0);
   }

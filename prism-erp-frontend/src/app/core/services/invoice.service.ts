@@ -27,7 +27,7 @@ export class InvoiceService {
     );
   }
 
-  updateInvoiceStatus(id: number, status: InvoiceStatus): Observable<InvoiceDTO> {
+  updateInvoiceStatus(id: number, status: string): Observable<InvoiceDTO> {
     const params = new HttpParams().set('status', status);
     return this.http.put<InvoiceDTO>(`${this.API_URL}/${id}/status`, {}, { params }).pipe(
       catchError(this.handleError)
