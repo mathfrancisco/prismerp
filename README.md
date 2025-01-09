@@ -143,22 +143,82 @@ src/
 └── environments/
 ```
 
-## 📅 Cronograma e Status
+## Cronograma de Desenvolvimento (6 Semanas)
 
-### Sprint 1-2 (Concluído)
-- [x] Setup do ambiente
-- [x] Estrutura base (Frontend/Backend)
-- [x] Autenticação JWT
-- [x] CRUD de Clientes
-- [x] CRUD de Funcionários
-- [x] Layout responsivo
+**Progresso atual: ~30-40% (Semana 3)**
 
-### Sprint 3 (Em Desenvolvimento)
-- [ ] Módulo de Vendas
-- [ ] Dashboard com gráficos
-- [ ] Gestão de Estoque
-- [ ] Relatórios básicos
-- [ ] Integrações iniciais
+**Semana 1: Configuração do Ambiente e Estrutura Base**
+
+*   [x] Configurar ambiente de desenvolvimento Java/Spring
+*   [x] Configurar ambiente Node.js/Angular
+*   [x] Instalar ferramentas necessárias (IDE, Git, Docker)
+*   [x] Criar repositórios Git
+*   [x] Configurar CI/CD básico
+*   [x] Configurar projeto Spring Boot
+*   [x] Implementar autenticação JWT
+*   [x] Configurar Spring Security
+*   [x] Definir estrutura base de APIs
+*   [x] Configurar banco de dados
+*   [x] Implementar estrutura base de testes
+
+**Semana 2: Core Backend**
+
+*   [x] Desenvolver entidades principais
+*   [x] Implementar repositórios base
+*   [x] Criar serviços core
+*   [x] Configurar Redis para cache
+*   [x] Implementar logging
+*   [x] Desenvolver APIs de autenticação
+*   [x] Implementar APIs de usuários
+*   [x] Criar APIs de produtos
+*   [x] Desenvolver APIs de clientes
+*   [x] Implementar validações
+
+**Semana 3: Frontend Base e Módulos Principais**
+
+*   [x] Configurar projeto Angular
+*   [x] Implementar autenticação frontend
+*   [x] Configurar rotas principais
+*   [x] Implementar interceptors
+*   [x] Configurar Tailwind e Bootstrap
+*   [x] Desenvolver dashboard principal
+*   [x] Implementar gestão de usuários
+*   [x] Criar módulo de produtos
+*   [x] Desenvolver módulo de clientes
+*   [x] Implementar navegação principal
+
+**Semana 4: Módulos de Negócio**
+
+*   **Backend:**
+    *   **Vendas:** Criar entidades, DTOs, Repositórios, Serviços e APIs REST para vendas e itens de venda. Implementar regras de negócio, validações e tratamento de erros.
+    *   **Financeiro:** Criar entidades, DTOs, Repositórios, Serviços e APIs REST para contas e lançamentos. Implementar regras de negócio, validações, tratamento de erros e integração com gateway de pagamento (se aplicável).
+    *   **Estoque:** Criar entidades, DTOs, Repositórios, Serviços e APIs REST para movimentações de estoque. Implementar regras de negócio, validações, tratamento de erros e integração com sistema de gestão de estoque (se aplicável).
+    *   **RH:** Criar entidades, DTOs, Repositórios, Serviços e APIs REST para folha de pagamento e funcionários. Implementar regras de negócio, validações e tratamento de erros.
+    *   **Compras:** Criar entidades, DTOs, Repositórios, Serviços e APIs REST para pedidos de compra e itens de pedido. Implementar regras de negócio, validações e tratamento de erros.
+*   **Frontend:**
+    *   Criar componentes Angular para cada módulo, com interfaces para cadastro, edição, listagem, visualização e outras operações relevantes. Integrar com os serviços do backend, implementar tratamento de erros e aplicar estilos consistentes.
+
+**Semana 5: Relatórios e Recursos Avançados**
+
+*   **Backend:**
+    *   **Relatórios:** Implementar geração de relatórios em PDF, Excel, etc. usando bibliotecas como iText, Apache POI ou JasperReports. Criar APIs REST para download.
+    *   **Notificações:** Implementar sistema de notificações (email, SMS, push) usando serviços como SendGrid, Twilio ou Firebase. Integrar com os módulos de negócio.
+    *   **Jobs Agendados:** Implementar jobs agendados (Spring Scheduler ou Quartz) para tarefas como envio de relatórios e backups.
+    *   **Upload de Arquivos:** Implementar upload de arquivos (Apache Commons FileUpload ou Spring MultipartFile). Armazenar arquivos localmente ou em nuvem (AWS S3, Google Cloud Storage).
+    *   **Dashboards:** Criar APIs REST para fornecer dados para dashboards. Implementar lógica de agregação e processamento de dados.
+*   **Frontend:**
+    *   **Relatórios:** Criar componentes para visualizar relatórios, com filtros e opções de personalização.
+    *   **Notificações:** Criar componentes para exibir notificações, com interação (marcar como lida, excluir).
+    *   **Upload de Arquivos:** Criar componentes para upload, com exibição de progresso e tratamento de erros.
+    *   **Dashboards:** Criar dashboards interativos (Chart.js, Highcharts, D3.js). Integrar com APIs do backend, com filtros e opções de visualização.
+    *   **Exportação PDF/Excel:** Integrar bibliotecas para exportação de dados.
+
+**Semana 6: Testes, Otimização e Deploy**
+
+*   **Testes:** Implementar testes unitários, de integração, end-to-end e de carga. Usar frameworks como JUnit, Mockito, Jest e Cypress.
+*   **Otimização:** Otimizar queries SQL, implementar caching, otimizar código Java e JavaScript, lazy loading, tamanho de bundles e SEO. Realizar testes de performance.
+*   **Deploy:** Configurar ambiente de produção, criar scripts de deploy automatizados, realizar deploy, configurar monitoramento, documentar o processo e usar ferramentas de CI/CD (Jenkins, GitLab CI/CD, GitHub Actions).
+
 
 ### Sprint 4-6 (Planejado)
 - [ ] Módulo Financeiro completo
@@ -171,10 +231,11 @@ src/
 
 ```
 Módulos Base............: 100%  ███████████
-Backend.................: 75%   ████████░░░
-Frontend...............: 60%   ██████░░░░░
-Testes.................: 70%   ███████░░░░
-Documentação...........: 80%   ████████░░░
+Backend.................: 40%   ████░░░░░░░
+Frontend...............: 40%   ████░░░░░░░
+Testes.................: 10%   █░░░░░░░░░
+Documentação...........: 20%   ██░░░░░░░░
+
 ```
 
 ## 🔜 Próximos Passos
