@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../core/services/user.service';
+import { AuthService } from '../../../core/auth/auth.service';
 import { UserDTO } from '../../../core/models/user.model';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, finalize, switchMap} from 'rxjs/operators';
@@ -38,7 +38,7 @@ export class UserListComponent implements OnInit {
     return Math.min((this.currentPage + 1) * this.pageSize, this.totalElements);
   }
 
-  constructor(private userService: UserService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -60,15 +60,15 @@ export class UserListComponent implements OnInit {
     const role = this.roleFilter.value;
 
     if (searchTerm) {
-      this.userService.searchUsers(searchTerm).subscribe(users => {
+      this.authService.searchUsers(searchTerm).subscribe(users => {
         this.users = users;
       });
     } else if (role) {
-      this.userService.getUsersByRole(role).subscribe(users => {
+      this.authService.getUsersByRole(role).subscribe(users => {
         this.users = users;
       });
     } else {
-      this.userService.getUsers(this.currentPage, this.pageSize).subscribe(page => {
+      this.authService.getUsers(this.currentPage, this.pageSize).subscribe(page => {
         this.users = page.content;
         this.totalElements = page.totalElements;
         this.totalPages = page.totalPages;
@@ -87,9 +87,9 @@ export class UserListComponent implements OnInit {
 
   deleteUser(user: UserDTO): void {
     if (confirm(`Are you sure you want to delete ${user.firstName} ${user.lastName}?`)) {
-      this.userService.deleteUser(user.id).pipe(
+      this.authService.deleteUser(user.id).pipe(
         finalize(() => this.loadUsers()), // Recarrega a lista após a exclusão
-        switchMap(() => this.userService.getUsers(this.currentPage, this.pageSize))
+        switchMap(() => this.authService.getUsers(this.currentPage, this.pageSize))
       ).subscribe({
         next: (page) => {
           this.users = page.content;

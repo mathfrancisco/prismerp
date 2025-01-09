@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../../core/services/user.service';
+import { AuthService } from '../../../core/auth/auth.service';
 import { UserDTO } from '../../../core/models/user.model';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { finalize } from 'rxjs/operators';
@@ -27,7 +27,7 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService,
+    private authservice: AuthService,
     private fb: FormBuilder,
     private location: Location // Injete o Location
   ) {}
@@ -41,14 +41,14 @@ export class UserDetailComponent implements OnInit {
 
   loadUser(): void {
     this.isLoading = true;
-    this.userService.getUserById(this.userId).pipe(
+    this.authservice.getUserById(this.userId).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
-      next: (user) => {
+      next: (user: UserDTO) => {
         this.user = user;
         this.createForm();
       },
-      error: (error) => {
+      error: (error: any) => {
         this.error = error;
         // Trate o erro adequadamente, talvez redirecionando ou exibindo uma mensagem
       }
@@ -75,15 +75,15 @@ export class UserDetailComponent implements OnInit {
       ...this.userForm.value
     };
 
-    this.userService.updateUser(this.userId, updatedUser).pipe(
+    this.authservice.updateUser(this.userId, updatedUser).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
-      next: (user) => {
+      next: (user: UserDTO) => {
         this.user = user;
         // Exiba uma mensagem de sucesso ou redirecione
         this.router.navigate(['/users']); // Redireciona para a lista de usuários
       },
-      error: (error) => {
+      error: (error: any) => {
         this.error = error;
         // Trate o erro adequadamente
       }

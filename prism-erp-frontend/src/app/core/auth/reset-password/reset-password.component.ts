@@ -10,7 +10,8 @@ import {CommonModule, NgIf} from '@angular/common';
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    CommonModule
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'

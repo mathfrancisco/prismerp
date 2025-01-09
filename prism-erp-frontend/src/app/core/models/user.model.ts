@@ -1,10 +1,11 @@
 
-export interface UserDTO { // Use UserDTO para consistência com o backend
+export interface UserDTO {
   id: number;
   email: string;
   firstName: string;
   lastName: string;
-  role: Role; // Use o enum Role aqui
+  role: Role;
+  password?: string;
 }
 
 export interface Page<T> {
@@ -15,10 +16,37 @@ export interface Page<T> {
   number: number;
 }
 
-export enum Role { // Defina o enum Role
+
+export enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER',
   MANAGER = 'MANAGER',
   ACCOUNTANT = 'ACCOUNTANT',
   SALES_REPRESENTATIVE = 'SALES_REPRESENTATIVE'
+}
+
+export interface AuthenticationRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface AuthenticationResponse {
+  token: string;
+  user: UserDTO;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
 }

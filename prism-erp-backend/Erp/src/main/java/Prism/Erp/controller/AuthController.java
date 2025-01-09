@@ -2,6 +2,7 @@ package Prism.Erp.controller;
 
 import Prism.Erp.entity.AuthenticationRequest;
 import Prism.Erp.entity.AuthenticationResponse;
+import Prism.Erp.entity.ForgotPasswordRequest;
 import Prism.Erp.entity.RegisterRequest;
 import Prism.Erp.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,15 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) throws AuthenticationException {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        try {
+            authenticationService.forgotPassword(request.getEmail());
+            return ResponseEntity.ok().build(); // Retorna 200 OK
+        } catch (Exception e) { // Trate exceções apropriadamente
+            return ResponseEntity.badRequest().body(e.getMessage()); // Ou um DTO de erro
+        }
+    }
+
 }
 

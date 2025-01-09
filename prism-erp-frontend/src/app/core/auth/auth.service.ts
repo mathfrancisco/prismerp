@@ -1,8 +1,10 @@
 // core/auth/auth.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
 import { Router } from '@angular/router';
+import {AuthenticationRequest, ForgotPasswordRequest, ResetPasswordRequest} from '../models/user.model';
+import {catchError} from 'rxjs/operators';
 
 interface AuthResponse {
   token: string;
@@ -39,10 +41,10 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/authenticate`, { email, password })
+  authenticate(authRequest: AuthenticationRequest): Observable<AuthResponse> { // Renomeado para authenticate
+    return this.http.post<AuthResponse>(`${this.API_URL}/authenticate`, authRequest)
       .pipe(
-        tap(response => {
+        tap(response =>{
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
           this.isAuthenticatedSubject.next(true);
@@ -63,15 +65,16 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  forgotPassword(email: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/forgot-password`, { email });
+  forgotPassword(request: ForgotPasswordRequest): Observable<any> { // Use o tipo correto
+    return this.http.post(`${this.API_URL}/forgot-password`, request).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  resetPassword(token: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/reset-password`, {
-      token,
-      newPassword
-    });
+  resetPassword( request: ResetPasswordRequest): Observable<any> { // Use o tipo correto
+    return this.http.post(`${this.API_URL}/reset-password`, request).pipe(
+      catchError(this.handleError)
+    );
   }
 
   isAuthenticated(): Observable<boolean> {
@@ -80,5 +83,18 @@ export class AuthService {
 
   getCurrentUser(): Observable<any> {
     return this.currentUserSubject.asObservable();
+
   }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An error occurred';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = error.error.message;
+    } else {
+      errorMessage = error.error?.message || `Server returned code ${error.status}`;
+    }
+    return throwError(() => new Error(errorMessage));
+  }
+
+
 }

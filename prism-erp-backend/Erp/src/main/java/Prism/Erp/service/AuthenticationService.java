@@ -71,4 +71,7 @@ public class AuthenticationService {
                 .role(user.getRole().name())
                 .build();
     }
+
+    public void forgotPassword(String email) {
+    }
 }
