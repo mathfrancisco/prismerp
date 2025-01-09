@@ -59,22 +59,21 @@ import {CustomerFormComponent} from './features/sales/customers/customer-form/cu
 
 export const routes: Routes = [
 
-  // Rotas protegidas pelo MainLayout
-  // Public Routes
+  // Rotas públicas
+  { path: '', component: MainLayoutComponent }, // Rota principal pública
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent, canActivate: [AuthGuard] },
+  { path: 'register', component: RegisterComponent }, // Rota de registro pública
+  { path: 'reset-password', component: ResetPasswordComponent }, // Rota de reset de senha pública
 
-  // Protected Routes within MainLayout
+
+  // Rotas protegidas pelo AuthGuard (apenas dashboard e suas sub-rotas)
   {
-    path: '',
-    component: MainLayoutComponent,
-    // canActivate: [AuthGuard],
+    path: 'dashboard',  // Remova a barra "/" antes de "dashboard"
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redireciona para /dashboard
-      { path: 'dashboard', component: DashboardComponent },
-
+      // Sub-rotas do dashboard (se houver) - todas protegidas pelo AuthGuard
       // Users
       { path: 'users', component: UserListComponent },
       { path: 'users/create', component: UserCreateComponent },
@@ -122,8 +121,9 @@ export const routes: Routes = [
     ]
   },
 
-  // Wildcard Route
-  { path: '**', redirectTo: '' },
+
+  // Wildcard route (opcional)
+  { path: '**', redirectTo: '' } // Redireciona para a página inicial se a rota não for encontrada
 ];
 
 @NgModule({
