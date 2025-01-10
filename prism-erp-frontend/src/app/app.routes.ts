@@ -56,16 +56,31 @@ import {ProductCreateComponent} from './features/inventory/products/product-crea
 import {ProductListComponent} from './features/inventory/products/product-list/product-list.component';
 import {UserCreateComponent} from './features/users/user-create/user-create.component';
 import {CustomerFormComponent} from './features/sales/customers/customer-form/customer-form.component';
+import {HomeComponent} from './layouts/main-layout/home/home.component';
+import {AboutComponent} from './layouts/main-layout/about/about.component';
+import {ServicesComponent} from './layouts/main-layout/services/services.component';
+import {BenefitsComponent} from './layouts/main-layout/benefits/benefits.component';
+import {ActivitySummaryComponent} from './features/dashboard/activity-summary/activity-summary.component';
 
 export const routes: Routes = [
 
-  // Rotas públicas
-  { path: '', component: MainLayoutComponent }, // Rota principal pública
-  { path: 'login', component: LoginComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'register', component: RegisterComponent }, // Rota de registro pública
-  { path: 'reset-password', component: ResetPasswordComponent }, // Rota de reset de senha pública
-
+  // Rotas públicas (com MainLayoutComponent)
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redireciona para /home
+      { path: 'home', component: HomeComponent }, // Componente Home
+      { path: 'about', component: AboutComponent },
+      {path: 'services', component: ServicesComponent},
+      {path: 'benefits', component: BenefitsComponent},
+      // ... outras rotas públicas que você queira adicionar
+      { path: 'login', component: LoginComponent },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'register', component: RegisterComponent },
+      { path: 'reset-password', component: ResetPasswordComponent },
+    ]
+  },
 
   // Rotas protegidas pelo AuthGuard (apenas dashboard e suas sub-rotas)
   {
@@ -73,7 +88,8 @@ export const routes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard],
     children: [
-      // Sub-rotas do dashboard (se houver) - todas protegidas pelo AuthGuard
+      { path: '', redirectTo: 'summary', pathMatch: 'full' }, // Redireciona para /dashboard/summary
+      { path: 'summary', component: ActivitySummaryComponent },
       // Users
       { path: 'users', component: UserListComponent },
       { path: 'users/create', component: UserCreateComponent },
@@ -90,6 +106,7 @@ export const routes: Routes = [
       { path: 'customers/create', component: CustomerFormComponent },
       { path: 'customers/:id/edit', component: CustomerFormComponent },
       { path: 'customers/:id', component: CustomerDetailComponent },
+
 
       // Finance
       { path: 'finance/invoices', component: InvoicesComponent },
@@ -116,8 +133,9 @@ export const routes: Routes = [
 
       // Sales
       { path: 'sales/orders', component: SalesOrdersComponent },
-      { path: 'sales/customers', component: CustomersComponent }, // Remova se já estiver listada acima
       { path: 'sales/quotations', component: QuotationsComponent },
+      { path: 'sales/customers', component: CustomersComponent },
+
     ]
   },
 

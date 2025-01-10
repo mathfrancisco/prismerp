@@ -15,6 +15,7 @@ import {
   faWarehouse,
   faFileInvoiceDollar
 } from '@fortawesome/free-solid-svg-icons';
+import {RouterModule} from '@angular/router';
 
 interface CarouselItem {
   icon: string;
@@ -25,7 +26,7 @@ interface CarouselItem {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FontAwesomeModule, CommonModule],
+  imports: [FontAwesomeModule, CommonModule,RouterModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

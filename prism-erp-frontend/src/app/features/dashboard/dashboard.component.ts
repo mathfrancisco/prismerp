@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ActivitySummaryComponent } from './activity-summary/activity-summary.component';
 import { ControlPanelComponent } from './control-panel/control-panel.component';
 import { SalesChartComponent } from './sales-chart/sales-chart.component';
+import {DashboardHeaderComponent} from '../../layouts/dashboard-header/dashboard-header.component';
+import {SidebarComponent} from '../../layouts/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +16,9 @@ import { SalesChartComponent } from './sales-chart/sales-chart.component';
     CommonModule,
     ActivitySummaryComponent,
     ControlPanelComponent,
-    SalesChartComponent
+    SalesChartComponent,
+    DashboardHeaderComponent,
+    SidebarComponent
   ],
 })
 export class DashboardComponent implements OnInit {

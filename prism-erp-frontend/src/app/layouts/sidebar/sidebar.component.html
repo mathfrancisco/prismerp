@@ -11,7 +11,8 @@
           routerLinkActive="bg-slate-700 text-white"
           class="group flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-slate-700 hover:text-white transition duration-200"
         >
-          <i [class]="'fas ' + item.icon + ' mr-3 text-lg'"></i> <!-- Ícone maior e com margem -->
+          -            <i [class]="'fas ' + item.icon + ' mr-3 text-lg'"></i>
+          +            <fa-icon [icon]="item.icon" class="mr-3 text-lg"></fa-icon>
           <span>{{ item.label }}</span>
         </a>
       </div>

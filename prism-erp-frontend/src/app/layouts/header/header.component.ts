@@ -1,19 +1,17 @@
 import { Component } from '@angular/core';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {
-  faCube,
-  faBars
-} from '@fortawesome/free-solid-svg-icons';
+import { faCube, faBars, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { RouterModule } from '@angular/router'; // Importe RouterModule
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [FontAwesomeModule, RouterModule], // Adicione RouterModule aos imports
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faCube, faBars);
+    library.addIcons(faCube, faBars, faArrowRight);
   }
 }

@@ -1,44 +1,55 @@
-<div class="p-4 sm:p-6 lg:p-8 bg-white min-h-screen">
-  <!-- Dashboard Header -->
-  <div class="mb-8">
-    <div class="flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-slate-900">Dashboard</h1>
-      <!-- Botão de adicionar novo (opcional) -->
-      <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-        Adicionar Novo
-      </button>
-    </div>
-    <p class="mt-2 text-sm text-slate-600">Welcome back! Here's an overview of your business.</p>
-  </div>
+<div class="flex h-screen overflow-hidden bg-gray-100">
+  <!-- Sidebar -->
+  <app-sidebar class="flex-shrink-0"></app-sidebar>
 
-  <!-- Quick Stats Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-    <div *ngFor="let stat of stats" class="bg-white rounded-lg shadow p-6 border border-gray-200">
-      <div class="flex items-center">
-        <div class="flex-shrink-0 p-3 rounded-lg" [ngClass]="stat.iconBg">
-          <i [class]="'fas ' + stat.icon + ' text-xl'" [ngClass]="stat.iconColor"></i>
+  <!-- Main Content -->
+  <div class="flex flex-col flex-1 w-full">
+    <!-- Header -->
+    <app-dashboard-header></app-dashboard-header>
+
+    <!-- Dashboard Content -->
+    <main class="flex-1 p-4 sm:p-6 lg:p-8 bg-white overflow-y-auto">
+      <!-- Título e botão de Adicionar -->
+      <div class="mb-8">
+        <div class="flex justify-between items-center">
+          <h1 class="text-3xl font-bold text-slate-900">Dashboard</h1>
+          <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+            Adicionar Novo
+          </button>
         </div>
-        <div class="ml-4">
-          <p class="text-sm font-medium text-gray-500">{{ stat.label }}</p>
-          <p class="text-2xl font-semibold text-slate-900">{{ stat.value }}</p>
-          <p class="text-sm" [ngClass]="stat.change > 0 ? 'text-green-500' : 'text-red-500'">
-            {{ stat.change > 0 ? '+' : '' }}{{ stat.change }}% from last month
-          </p>
+        <p class="mt-2 text-sm text-slate-600">Bem-vindo! Aqui está um resumo do seu negócio.</p>
+      </div>
+
+      <!-- Quick Stats Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div *ngFor="let stat of stats" class="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 p-3 rounded-lg" [ngClass]="stat.iconBg">
+              <i [class]="'fas ' + stat.icon + ' text-xl'" [ngClass]="stat.iconColor"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-500">{{ stat.label }}</p>
+              <p class="text-2xl font-semibold text-slate-900">{{ stat.value }}</p>
+              <p class="text-sm" [ngClass]="stat.change > 0 ? 'text-green-500' : 'text-red-500'">
+                {{ stat.change > 0 ? '+' : '' }}{{ stat.change }}% em relação ao mês passado
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Main Dashboard Content -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
-      <app-activity-summary></app-activity-summary>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
-      <app-control-panel></app-control-panel>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
-      <app-sales-chart></app-sales-chart>
-    </div>
+      <!-- Main Dashboard Content -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <app-activity-summary></app-activity-summary>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <app-control-panel></app-control-panel>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <app-sales-chart></app-sales-chart>
+        </div>
+      </div>
+    </main>
   </div>
 </div>
