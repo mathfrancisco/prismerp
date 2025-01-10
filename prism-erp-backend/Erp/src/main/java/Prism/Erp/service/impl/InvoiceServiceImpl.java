@@ -37,18 +37,19 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public InvoiceDTO generateInvoice(Long orderId) {
-        SalesOrder order = salesOrderRepository.findById(orderId)
+        SalesOrderDTO order = salesOrderService.getOrderById(orderId);
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
 
         validateOrderForInvoice(order);
 
-        Invoice invoice = new Invoice();
-        invoice.setInvoiceNumber(generateInvoiceNumber());
-        invoice.setSalesOrder(order);
-        invoice.setCustomer(order.getCustomer());
-        invoice.setIssueDate(LocalDateTime.now());
-        invoice.setDueDate(LocalDateTime.now().plusDays(30)); // Configurable
-        invoice.setStatus(InvoiceStatus.PENDING);
+       Invoice invoice = Invoice.builder()
+            .invoiceNumber(generateInvoiceNumber())
+            .salesOrder(invoiceMapper.toSalesOrder(order))
+            .status(InvoiceStatus.DRAFT)
+            .totalAmount(order.getTotalAmount())
+            .tax(calculateTax(invoiceMapper.toSalesOrder(order)))
+            .issueDate(LocalDateTime.now())
+            .build();
 
         // Cálculo de valores e impostos
         InvoiceTaxCalculationDTO taxes = calculateTaxesForOrder(order);
