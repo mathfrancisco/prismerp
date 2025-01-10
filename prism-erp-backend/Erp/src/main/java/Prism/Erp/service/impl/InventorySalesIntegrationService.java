@@ -3,6 +3,7 @@ package Prism.Erp.service.impl;
 import Prism.Erp.dto.SaleItemDTO;
 import Prism.Erp.dto.InventoryTransactionDTO;
 import Prism.Erp.dto.SaleDTO;
+import Prism.Erp.entity.SalesOrderItem;
 import Prism.Erp.exception.InsufficientStockException;
 import Prism.Erp.service.InventoryService;
 import Prism.Erp.service.SaleService;
@@ -69,5 +70,8 @@ public class InventorySalesIntegrationService {
 
             inventoryService.createTransaction(transaction);
         }
+    }
+
+    public void reserveInventory(Long id, List<SalesOrderItem> items) {
     }
 }

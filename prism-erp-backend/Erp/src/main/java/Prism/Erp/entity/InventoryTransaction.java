@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import Prism.Erp.model.TransactionType;
 
 @Entity
 @Table(name = "inventory_transactions")
@@ -22,13 +23,21 @@ public class InventoryTransaction {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String type;
+    private TransactionType transactionType;
 
     @Column(nullable = false)
     private Integer quantity;
 
-    private String reference;
+    @Column(nullable = false)
+    private Integer previousQuantity;
+
+    @Column(nullable = false)
+    private Integer newQuantity;
+
+    @Column(name = "reference_id")
+    private Long referenceId;
 
     private String notes;
 

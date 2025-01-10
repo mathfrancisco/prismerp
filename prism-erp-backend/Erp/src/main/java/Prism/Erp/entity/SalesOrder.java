@@ -38,4 +38,9 @@ public class SalesOrder extends BaseEntity {
 
     private LocalDate orderDate;
     private LocalDate deliveryDate;
+
+    public BigDecimal getTaxAmount() {
+        return BigDecimal.ZERO;
+    }
+
 }

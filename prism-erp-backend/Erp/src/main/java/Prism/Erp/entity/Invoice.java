@@ -2,6 +2,7 @@ package Prism.Erp.entity;
 
 import Prism.Erp.model.InvoiceStatus;
 import jakarta.persistence.*;
+import jakarta.persistence.metamodel.EntityType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,4 +41,20 @@ public class Invoice extends BaseEntity {
 
     private LocalDate invoiceDate;
     private LocalDate dueDate;
+
+    public Object getTaxAmount() {
+        return BigDecimal.ZERO;
+    }
+
+    public Object getDiscountAmount() {
+        return BigDecimal.ZERO;
+    }
+
+    public Object getIssueDate() {
+        return LocalDate.now();
+    }
+
+    public EntityType<Object> getCustomer() {
+        return null;
+    }
 }

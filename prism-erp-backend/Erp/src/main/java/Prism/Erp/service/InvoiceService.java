@@ -2,6 +2,7 @@ package Prism.Erp.service;
 
 import Prism.Erp.dto.InvoiceDTO;
 import Prism.Erp.dto.InvoiceTaxCalculationDTO;
+import Prism.Erp.entity.SalesOrder;
 import Prism.Erp.model.InvoiceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,6 @@ public interface InvoiceService {
 
     InvoiceTaxCalculationDTO calculateTaxes(Long id);
     InvoiceDTO getByInvoiceNumber(String invoiceNumber);
+
+    BigDecimal calculateTax(SalesOrder salesOrder);
 }
