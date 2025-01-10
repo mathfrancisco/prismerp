@@ -1,5 +1,6 @@
 package Prism.Erp.dto;
 
+import Prism.Erp.model.TransactionType;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,4 +21,10 @@ public class InventoryTransactionDTO {
     private String notes;
     private LocalDateTime transactionDate;
     private String createdBy;
+    private TransactionType transactionType;  // Changed from String type
+    private Integer previousQuantity;
+    private Integer newQuantity;
+    private Long referenceId;
+
+
 }

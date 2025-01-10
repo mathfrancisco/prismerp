@@ -1,5 +1,6 @@
 package Prism.Erp.entity;
 
+import Prism.Erp.dto.InvoiceDTO;
 import Prism.Erp.model.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -38,9 +39,27 @@ public class SalesOrder extends BaseEntity {
 
     private LocalDate orderDate;
     private LocalDate deliveryDate;
+    private LocalDate approvalDate;
 
-    public BigDecimal getTaxAmount() {
-        return BigDecimal.ZERO;
+    @Setter
+    @Column(name = "tax_amount")
+    private BigDecimal taxAmount = BigDecimal.ZERO;
+
+    @OneToOne
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_plan_id")
+    private PaymentPlan paymentPlan;
+
+    @Column(name = "payment_id")
+    private String paymentId;
+
+    @Column(name = "payment_status")
+    private String paymentStatus;
+
+    public void setInvoice(InvoiceDTO invoice) {
+        this.invoice = invoice;
     }
-
 }

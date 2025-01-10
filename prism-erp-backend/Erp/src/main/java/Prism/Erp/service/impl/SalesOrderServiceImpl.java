@@ -1,6 +1,7 @@
 package Prism.Erp.service.impl;
 
 
+import Prism.Erp.dto.InvoiceDTO;
 import Prism.Erp.dto.SalesOrderDTO;
 import Prism.Erp.dto.SalesOrderItemDTO;
 import Prism.Erp.entity.*;
@@ -12,6 +13,7 @@ import Prism.Erp.repository.CustomerRepository;
 import Prism.Erp.repository.PaymentPlanRepository;
 import Prism.Erp.repository.ProductRepository;
 import Prism.Erp.repository.SalesOrderRepository;
+import Prism.Erp.service.InventorySalesIntegrationService;
 import Prism.Erp.service.InvoiceService;
 import Prism.Erp.service.SalesOrderService;
 import Prism.Erp.validation.ValidationService; // Certifique-se de que este serviço exista
@@ -84,13 +86,17 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         SalesOrder savedOrder = salesOrderRepository.save(salesOrder);
         return toDTO(savedOrder);
     }
-    @Override
+
+    private void validateCustomerCreditLimit(Customer customer, BigDecimal totalAmount) {
+    }
+
     @Transactional
+    @Override
     public SalesOrderDTO approveOrder(Long id) {
         SalesOrder order = salesOrderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
 
-        if (order.getStatus() != OrderStatus.PENDING_APPROVAL) {
+        if (order.getStatus() != OrderStatus.PENDING) {
             throw new BusinessException("Pedido não está pendente de aprovação");
         }
 
@@ -103,19 +109,19 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         }
 
         // Atualizar status
-        order.setStatus(OrderStatus.APPROVED);
+        order.setStatus(OrderStatus.CONFIRMED);
         order.setApprovalDate(LocalDate.now());
 
         // Gerar fatura
-        Invoice invoice = invoiceService.generateInvoice(order);
+        InvoiceDTO invoice = invoiceService.generateInvoice(order.getId());
         order.setInvoice(invoice);
 
         return toDTO(salesOrderRepository.save(order));
     }
 
 
-    @Override
     @Transactional
+    @Override
     public SalesOrderDTO cancelOrder(Long id) {
         SalesOrder order = salesOrderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
@@ -159,7 +165,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         salesOrder.setOrderNumber(generateOrderNumber());
         salesOrder.setCustomer(customer);
         salesOrder.setItems(items);
-        salesOrder.setStatus(OrderStatus.PENDING_APPROVAL);
+        salesOrder.setStatus(OrderStatus.PENDING);
         salesOrder.setTotalAmount(totalAmount);
         salesOrder.setOrderDate(LocalDate.now());
 
@@ -189,7 +195,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             order.setPaymentId(paymentId);
             order.setPaymentStatus("APPROVED");
         } catch (Exception e) {
-            throw new PaymentProcessingException("Erro ao processar pagamento", e);
+            throw new RuntimeException("Erro ao processar pagamento", e);
         }
     }
 
@@ -199,13 +205,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             // Cancelar pagamento no gateway
             order.setPaymentStatus("CANCELLED");
         } catch (Exception e) {
-            throw new PaymentProcessingException("Erro ao cancelar pagamento", e);
+            throw new RuntimeException("Erro ao cancelar pagamento", e);
         }
     }
 
     private boolean canBeCancelled(OrderStatus status) {
         return status == OrderStatus.DRAFT ||
-                status == OrderStatus.PENDING_APPROVAL;
+                status == OrderStatus.PENDING;
     }
 
 

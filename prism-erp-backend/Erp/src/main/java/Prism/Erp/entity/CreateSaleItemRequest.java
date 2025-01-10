@@ -15,4 +15,6 @@ public class CreateSaleItemRequest {
     private Long productId;
     private Integer quantity;
     private BigDecimal discount;
+    private BigDecimal unitPrice;
+
 }

@@ -2,15 +2,15 @@ package Prism.Erp.service.impl;
 
 import Prism.Erp.dto.InvoiceDTO;
 import Prism.Erp.dto.InvoiceTaxCalculationDTO;
+import Prism.Erp.dto.SalesOrderDTO;
 import Prism.Erp.entity.*;
 import Prism.Erp.exception.BusinessException;
 import Prism.Erp.exception.ResourceNotFoundException;
 import Prism.Erp.model.InvoiceStatus;
 import Prism.Erp.repository.InvoiceRepository;
-import Prism.Erp.repository.SalesOrderRepository;
 import Prism.Erp.service.InvoiceService;
+import Prism.Erp.service.SalesOrderService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,16 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class InvoiceServiceImpl implements InvoiceService {
-    
+
     private final InvoiceRepository invoiceRepository;
     private final SalesOrderService salesOrderService;
-    private final InvoiceMapper invoiceMapper;
 
     private static final BigDecimal TAX_RATE_ICMS = new BigDecimal("0.18");
     private static final BigDecimal TAX_RATE_IPI = new BigDecimal("0.05");
@@ -37,32 +37,25 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public InvoiceDTO generateInvoice(Long orderId) {
-        SalesOrderDTO order = salesOrderService.getOrderById(orderId);
-                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
+        SalesOrderDTO orderDTO = salesOrderService.getOrderById(orderId);
+        SalesOrder order = toSalesOrder(orderDTO);
 
         validateOrderForInvoice(order);
 
-       Invoice invoice = Invoice.builder()
-            .invoiceNumber(generateInvoiceNumber())
-            .salesOrder(invoiceMapper.toSalesOrder(order))
-            .status(InvoiceStatus.DRAFT)
-            .totalAmount(order.getTotalAmount())
-            .tax(calculateTax(invoiceMapper.toSalesOrder(order)))
-            .issueDate(LocalDateTime.now())
-            .build();
+        Invoice invoice = new Invoice();
+        invoice.setInvoiceNumber(generateInvoiceNumber());
+        invoice.setSalesOrder(order);
+        invoice.setStatus(InvoiceStatus.DRAFT);
+        invoice.setTotalAmount(order.getTotalAmount());
+        invoice.setInvoiceDate(LocalDate.now());
+        invoice.setDueDate(LocalDate.now().plusDays(30));
 
         // Cálculo de valores e impostos
         InvoiceTaxCalculationDTO taxes = calculateTaxesForOrder(order);
+        BigDecimal taxAmount = calculateTax(order);
 
         invoice.setSubtotal(order.getTotalAmount());
-        invoice.setTaxAmount(taxes.getTotalTaxes());
-        invoice.setTotalAmount(order.getTotalAmount().add(taxes.getTotalTaxes()));
-
-        // Valores discriminados de impostos
-        invoice.setIcmsValue(taxes.getIcmsValue());
-        invoice.setIpiValue(taxes.getIpiValue());
-        invoice.setPisValue(taxes.getPisValue());
-        invoice.setCofinsValue(taxes.getCofinsValue());
+        invoice.setTotalAmount(order.getTotalAmount().add(taxAmount));
 
         Invoice savedInvoice = invoiceRepository.save(invoice);
         return convertToDTO(savedInvoice);
@@ -110,15 +103,15 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Fatura não encontrada"));
 
-        if (invoice.getStatus() != InvoiceStatus.PENDING) {
-            throw new BusinessException("Desconto só pode ser aplicado em faturas pendentes");
+        if (invoice.getStatus() != InvoiceStatus.DRAFT) {
+            throw new BusinessException("Desconto só pode ser aplicado em faturas em rascunho");
         }
 
         BigDecimal discountAmount = invoice.getTotalAmount()
                 .multiply(discountPercentage)
                 .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
 
-        invoice.setDiscountAmount(discountAmount);
+        invoice.setDiscountPercentage(discountPercentage);
         invoice.setTotalAmount(invoice.getTotalAmount().subtract(discountAmount));
 
         return convertToDTO(invoiceRepository.save(invoice));
@@ -133,6 +126,17 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    public BigDecimal calculateTax(SalesOrder salesOrder) {
+        BigDecimal baseValue = salesOrder.getTotalAmount();
+
+        return baseValue.multiply(TAX_RATE_ICMS)
+                .add(baseValue.multiply(TAX_RATE_IPI))
+                .add(baseValue.multiply(TAX_RATE_PIS))
+                .add(baseValue.multiply(TAX_RATE_COFINS))
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
     public InvoiceDTO getByInvoiceNumber(String invoiceNumber) {
         return invoiceRepository.findByInvoiceNumber(invoiceNumber)
                 .map(this::convertToDTO)
@@ -142,39 +146,32 @@ public class InvoiceServiceImpl implements InvoiceService {
     private InvoiceTaxCalculationDTO calculateTaxesForOrder(SalesOrder order) {
         BigDecimal baseValue = order.getTotalAmount();
 
-        BigDecimal icmsValue = baseValue.multiply(TAX_RATE_ICMS);
-        BigDecimal ipiValue = baseValue.multiply(TAX_RATE_IPI);
-        BigDecimal pisValue = baseValue.multiply(TAX_RATE_PIS);
-        BigDecimal cofinsValue = baseValue.multiply(TAX_RATE_COFINS);
-
-        BigDecimal totalTaxes = icmsValue
-                .add(ipiValue)
-                .add(pisValue)
-                .add(cofinsValue);
+        BigDecimal icmsAmount = baseValue.multiply(TAX_RATE_ICMS);
+        BigDecimal pisAmount = baseValue.multiply(TAX_RATE_PIS);
+        BigDecimal cofinsAmount = baseValue.multiply(TAX_RATE_COFINS);
+        BigDecimal taxAmount = icmsAmount.add(pisAmount).add(cofinsAmount);
 
         return InvoiceTaxCalculationDTO.builder()
-                .baseValue(baseValue)
-                .icmsValue(icmsValue)
-                .ipiValue(ipiValue)
-                .pisValue(pisValue)
-                .cofinsValue(cofinsValue)
-                .totalTaxes(totalTaxes)
+                .subtotal(baseValue)
+                .icmsAmount(icmsAmount)
+                .pisAmount(pisAmount)
+                .cofinsAmount(cofinsAmount)
+                .taxAmount(taxAmount)
+                .totalAmount(baseValue.add(taxAmount))
                 .build();
     }
 
     private void validateOrderForInvoice(SalesOrder order) {
-        if (order.getInvoice() != null) {
+        if (invoiceRepository.findBySalesOrderId(order.getId()).isPresent()) {
             throw new BusinessException("Pedido já possui fatura gerada");
         }
 
-        // Adicione outras validações necessárias
         if (order.getTotalAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("Pedido com valor total inválido");
         }
     }
 
     private void validateStatusTransition(InvoiceStatus currentStatus, InvoiceStatus newStatus) {
-        // Implemente as regras de transição de status
         if (currentStatus == InvoiceStatus.CANCELLED) {
             throw new BusinessException("Não é possível alterar o status de uma fatura cancelada");
         }
@@ -192,16 +189,34 @@ public class InvoiceServiceImpl implements InvoiceService {
         return InvoiceDTO.builder()
                 .id(invoice.getId())
                 .invoiceNumber(invoice.getInvoiceNumber())
-                .customerId(invoice.getCustomer().getId())
-                .customerName(invoice.getCustomer().getName())
-                .orderId(invoice.getSalesOrder().getId())
-                .issueDate(invoice.getIssueDate())
-                .dueDate(invoice.getDueDate())
-                .subtotal(invoice.getSubtotal())
-                .taxAmount(invoice.getTaxAmount())
-                .discountAmount(invoice.getDiscountAmount())
+                .salesOrderId(invoice.getSalesOrder().getId())
                 .totalAmount(invoice.getTotalAmount())
-                .status(invoice.getStatus())
+                .status(invoice.getStatus().toString())
+                .invoiceDate(invoice.getInvoiceDate())
+                .dueDate(invoice.getDueDate())
                 .build();
+    }
+
+    private SalesOrder toSalesOrder(SalesOrderDTO orderDTO) {
+        SalesOrder order = new SalesOrder();
+        order.setId(orderDTO.getId());
+        order.setOrderNumber(orderDTO.getOrderNumber());
+        order.setTotalAmount(orderDTO.getTotalAmount());
+
+        // Convert items if needed
+        if (orderDTO.getItems() != null) {
+            order.setItems(orderDTO.getItems().stream()
+                    .map(itemDTO -> {
+                        SalesOrderItem item = new SalesOrderItem();
+                        item.setId(itemDTO.getId());
+                        item.setQuantity(itemDTO.getQuantity());
+                        item.setUnitPrice(itemDTO.getUnitPrice());
+                        item.setTotalPrice(itemDTO.getTotalPrice());
+                        return item;
+                    })
+                    .toList());
+        }
+
+        return order;
     }
 }

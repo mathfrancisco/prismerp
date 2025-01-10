@@ -40,4 +40,8 @@ public class Product extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean active = true;
+
+    public BigDecimal getDiscount() {
+        return this.price.multiply(new BigDecimal("0.05"));
+    }
 }

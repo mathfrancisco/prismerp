@@ -5,6 +5,7 @@ import Prism.Erp.dto.ProductStockDTO;
 import Prism.Erp.entity.InventoryTransaction;
 import Prism.Erp.entity.Product;
 import Prism.Erp.entity.ProductStock;
+import Prism.Erp.exception.InsufficientStockException;
 import Prism.Erp.exception.ResourceNotFoundException;
 import Prism.Erp.repository.InventoryTransactionRepository;
 import Prism.Erp.repository.ProductRepository;
@@ -37,19 +38,28 @@ public class InventoryServiceImpl implements InventoryService {
         ProductStock stock = stockRepository.findByProductId(transactionDTO.getProductId())
                 .orElseGet(() -> createInitialStock(product));
 
-        // Update stock levels
-        if ("OUTBOUND".equals(transactionDTO.getType())) {
-            stock.setCurrentStock(stock.getCurrentStock() - transactionDTO.getQuantity());
+        int previousQuantity = stock.getCurrentStock();
+        int newQuantity;
+
+        // Update stock levels based on transaction type
+        if (transactionDTO.getTransactionType().isDecrease()) {
+            newQuantity = previousQuantity - transactionDTO.getQuantity();
+            if (newQuantity < 0) {
+                throw new InsufficientStockException("Insufficient stock for product: " + product.getId());
+            }
         } else {
-            stock.setCurrentStock(stock.getCurrentStock() + transactionDTO.getQuantity());
+            newQuantity = previousQuantity + transactionDTO.getQuantity();
         }
+        stock.setCurrentStock(newQuantity);
 
         // Create transaction record
         InventoryTransaction transaction = InventoryTransaction.builder()
                 .product(product)
-                .type(transactionDTO.getType())
+                .transactionType(transactionDTO.getTransactionType())
                 .quantity(transactionDTO.getQuantity())
-                .reference(transactionDTO.getReference())
+                .previousQuantity(previousQuantity)
+                .newQuantity(newQuantity)
+                .referenceId(transactionDTO.getReferenceId())
                 .notes(transactionDTO.getNotes())
                 .transactionDate(LocalDateTime.now())
                 .createdBy("SYSTEM") // Should come from security context
@@ -60,6 +70,8 @@ public class InventoryServiceImpl implements InventoryService {
 
         return convertTransactionToDTO(transaction);
     }
+
+
 
     @Override
     public Page<ProductStockDTO> getStockLevels(Pageable pageable) {
@@ -111,13 +123,16 @@ public class InventoryServiceImpl implements InventoryService {
                 .build();
     }
 
+    // Add this method to convert entity to DTO
     private InventoryTransactionDTO convertTransactionToDTO(InventoryTransaction transaction) {
         return InventoryTransactionDTO.builder()
                 .id(transaction.getId())
                 .productId(transaction.getProduct().getId())
-                .type(transaction.getType())
+                .transactionType(transaction.getTransactionType())
                 .quantity(transaction.getQuantity())
-                .reference(transaction.getReference())
+                .previousQuantity(transaction.getPreviousQuantity())
+                .newQuantity(transaction.getNewQuantity())
+                .referenceId(transaction.getReferenceId())
                 .notes(transaction.getNotes())
                 .transactionDate(transaction.getTransactionDate())
                 .createdBy(transaction.getCreatedBy())

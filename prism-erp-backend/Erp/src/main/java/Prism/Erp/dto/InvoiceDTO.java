@@ -1,5 +1,6 @@
 package Prism.Erp.dto;
 
+import Prism.Erp.entity.Invoice;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-public class InvoiceDTO {
+public class InvoiceDTO extends Invoice {
     private Long id;
     private String invoiceNumber;
     private Long salesOrderId;

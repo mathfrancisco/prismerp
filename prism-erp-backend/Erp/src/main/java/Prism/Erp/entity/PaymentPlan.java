@@ -34,4 +34,8 @@ public class PaymentPlan extends BaseEntity {
     private BigDecimal interestRate;
 
     private String paymentMethod;
+
+    public boolean requiresPrePayment() {
+        return frequency.equals(PaymentFrequency.MONTHLY) || frequency.equals(PaymentFrequency.QUARTERLY);
+    }
 }

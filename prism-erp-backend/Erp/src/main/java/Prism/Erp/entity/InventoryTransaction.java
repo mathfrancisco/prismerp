@@ -46,4 +46,12 @@ public class InventoryTransaction {
 
     @Column(nullable = false)
     private String createdBy;
+
+    public String getType() {
+        return transactionType.toString();
+    }
+
+    public String getReference() {
+        return referenceId.toString();
+    }
 }
