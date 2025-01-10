@@ -187,6 +187,18 @@ src/
 *   [x] Desenvolver módulo de clientes
 *   [x] Implementar navegação principal
 
+**Semana 4: Módulos de Negócio (Em andamento)**
+
+**Backend:**
+* [x] Vendas: Entidades básicas e APIs REST
+* [x] Financeiro: Estrutura inicial e contas a receber
+* [x] Estoque: Controle básico de entrada/saída
+* [x] RH: Cadastro de funcionários e departamentos
+*  Compras: Em desenvolvimento
+*  Integrações entre módulos
+*  Regras de negócio avançadas
+
+
 **Semana 4: Módulos de Negócio**
 
 *   **Backend:**
@@ -231,10 +243,10 @@ src/
 
 ```
 Módulos Base............: 100%  ███████████
-Backend.................: 40%   ████░░░░░░░
-Frontend...............: 40%   ████░░░░░░░
-Testes.................: 10%   █░░░░░░░░░
-Documentação...........: 20%   ██░░░░░░░░
+Backend.................: 65%   ██████░░░░░
+Frontend...............: 55%   █████░░░░░░
+Testes.................: 25%   ██░░░░░░░░░
+Documentação...........: 40%   ████░░░░░░░
 
 ```
 
