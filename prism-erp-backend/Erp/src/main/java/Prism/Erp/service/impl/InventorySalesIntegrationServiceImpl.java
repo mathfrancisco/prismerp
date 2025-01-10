@@ -2,28 +2,24 @@ package Prism.Erp.service.impl;
 
 import Prism.Erp.dto.SaleDTO;
 import Prism.Erp.dto.SaleItemDTO;
-import Prism.Erp.entity.InventoryTransaction;
-import Prism.Erp.entity.Product;
-import Prism.Erp.entity.ProductStock;
+import Prism.Erp.dto.InventoryTransactionDTO;
 import Prism.Erp.entity.SalesOrderItem;
 import Prism.Erp.exception.BusinessException;
 import Prism.Erp.exception.InsufficientStockException;
+import Prism.Erp.exception.ResourceNotFoundException;
 import Prism.Erp.model.TransactionType;
 import Prism.Erp.repository.ProductRepository;
-import Prism.Erp.repository.ProductStockRepository;
 import Prism.Erp.repository.InventoryTransactionRepository;
-
 import Prism.Erp.service.InventoryService;
 import Prism.Erp.service.SaleService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,22 +28,28 @@ import java.util.stream.Collectors;
 public class InventorySalesIntegrationServiceImpl implements InventorySalesIntegrationService {
     
     private final InventoryService inventoryService;
+    private final SaleService saleService;
     private final ProductRepository productRepository;
     private final InventoryTransactionRepository inventoryTransactionRepository;
     
     @Autowired
     public InventorySalesIntegrationServiceImpl(
             InventoryService inventoryService,
+            SaleService saleService,
             ProductRepository productRepository,
             InventoryTransactionRepository inventoryTransactionRepository) {
         this.inventoryService = inventoryService;
+        this.saleService = saleService;
         this.productRepository = productRepository;
         this.inventoryTransactionRepository = inventoryTransactionRepository;
     }
 
     @Override
+    @Transactional
     public void processSaleInventoryTransaction(SaleDTO sale) {
         log.info("Processing inventory transaction for sale: {}", sale.getSaleNumber());
+        validateStockAvailability(sale.getItems());
+        
         sale.getItems().forEach(item -> {
             InventoryTransactionDTO transactionDTO = InventoryTransactionDTO.builder()
                 .productId(item.getProductId())
@@ -116,6 +118,7 @@ public class InventorySalesIntegrationServiceImpl implements InventorySalesInteg
     }
 
     @Override
+    @Transactional
     public void cancelSaleInventoryTransaction(Long saleId, List<SaleItemDTO> items) {
         log.info("Canceling inventory transaction for sale: {}", saleId);
         items.forEach(item -> {
@@ -156,18 +159,18 @@ public class InventorySalesIntegrationServiceImpl implements InventorySalesInteg
     }
 
     @Override
-    public void validateStockAvailability(List<SalesOrderItem> items) {
+    public void validateStockAvailability(List<SaleItemDTO> items) {
         log.info("Validating stock availability for {} items", items.size());
         List<String> errors = new ArrayList<>();
         
         items.forEach(item -> {
-            ProductStockDTO stock = inventoryService.getProductStock(item.getProduct().getId());
+            ProductStockDTO stock = inventoryService.getProductStock(item.getProductId());
             if (stock == null) {
-                errors.add(String.format("Product stock not found for product: %s", 
-                    item.getProduct().getCode()));
+                errors.add(String.format("Product stock not found for product ID: %d", 
+                    item.getProductId()));
             } else if (stock.getCurrentStock() < item.getQuantity()) {
                 errors.add(String.format("Insufficient stock for product %s. Available: %d, Requested: %d",
-                    item.getProduct().getCode(), stock.getCurrentStock(), item.getQuantity()));
+                    stock.getProductName(), stock.getCurrentStock(), item.getQuantity()));
             }
         });
         
