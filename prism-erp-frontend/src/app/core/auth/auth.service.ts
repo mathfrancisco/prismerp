@@ -1,7 +1,7 @@
 // core/auth/auth.service.ts
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {BehaviorSubject, Observable, tap, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, of, tap, throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {AuthenticationRequest, ForgotPasswordRequest, ResetPasswordRequest} from '../models/user.model';
 import {catchError} from 'rxjs/operators';
@@ -41,14 +41,27 @@ export class AuthService {
     }
   }
 
-  authenticate(authRequest: AuthenticationRequest): Observable<AuthResponse> { // Renomeado para authenticate
+
+  authenticate(authRequest: AuthenticationRequest): Observable<AuthResponse | null>{
+    console.log("Enviando requisição de autenticação:", authRequest); // Log antes da requisição
     return this.http.post<AuthResponse>(`${this.API_URL}/authenticate`, authRequest)
       .pipe(
-        tap(response =>{
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          this.isAuthenticatedSubject.next(true);
-          this.currentUserSubject.next(response.user);
+        tap(response => {
+          console.log("Resposta da API (authenticate):", response);
+          if (response && response.token) { // Verifica se a resposta e o token existem
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('user', JSON.stringify(response.user));
+            this.isAuthenticatedSubject.next(true);
+            this.currentUserSubject.next(response.user);
+            console.log("Token e usuário armazenados no localStorage.");
+          } else {
+            console.error("Resposta da API não contém token ou está vazia.");
+          }
+        }),
+        catchError(error => {
+          console.error("Erro na requisição de autenticação:", error);
+          this.handleError(error); // Chama this.handleError para tratamento e logs
+          return of(null); // Retorna um observable vazio em caso de erro. Importante!
         })
       );
   }
@@ -88,13 +101,22 @@ export class AuthService {
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An error occurred';
+    let errorMessage = 'An unknown error occurred.'; // Mensagem padrão
     if (error.error instanceof ErrorEvent) {
-      errorMessage = error.error.message;
+      // Erro do lado do cliente
+      errorMessage = `Client-side error: ${error.error.message}`;
     } else {
-      errorMessage = error.error?.message || `Server returned code ${error.status}`;
+      // Erro do lado do servidor
+      if (error.status !== 0) { // Verifica se houve resposta do servidor
+        errorMessage = `Server returned code ${error.status}, error message is: ${error.message}`;
+      } else {
+        errorMessage = 'No response received from the server. Please check your internet connection.';
+      }
     }
-    return throwError(() => new Error(errorMessage));
+
+    console.error(errorMessage); // Log do erro no console
+    // window.alert(errorMessage); // Alerta (opcional - remova se não quiser alertas)
+    return throwError(() => new Error(errorMessage)); // Retorna um observable de erro
   }
 
 
