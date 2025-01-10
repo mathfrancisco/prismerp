@@ -18,65 +18,68 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@Transactional
 public class SaleServiceImpl implements SaleService {
-
+    
     private final SaleRepository saleRepository;
-    private final CustomerRepository customerRepository;
-    private final ProductRepository productRepository;
-    private final InventorySalesIntegrationService inventorySalesIntegration;
+    private final InventorySalesIntegrationService inventoryIntegrationService;
+    private final InvoiceService invoiceService;
+    private final SaleMapper saleMapper;
+    
+    @Autowired
+    public SaleServiceImpl(
+            SaleRepository saleRepository,
+            InventorySalesIntegrationService inventoryIntegrationService,
+            InvoiceService invoiceService,
+            SaleMapper saleMapper) {
+        this.saleRepository = saleRepository;
+        this.inventoryIntegrationService = inventoryIntegrationService;
+        this.invoiceService = invoiceService;
+        this.saleMapper = saleMapper;
+    }
 
-    @Override
-    @Transactional
+   @Override
     public SaleDTO createSale(CreateSaleRequest request) {
-        // Buscar cliente
-        Customer customer = customerRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
-
+        // Validar disponibilidade de estoque
+        List<SalesOrderItem> orderItems = request.getItems().stream()
+            .map(this::convertToSalesOrderItem)
+            .collect(Collectors.toList());
+            
+        inventoryIntegrationService.validateStockAvailability(orderItems);
+        
         // Criar venda
-        Sale sale = Sale.builder()
-                .saleNumber(generateSaleNumber())
-                .customer(customer)
-                .saleDate(LocalDateTime.now())
-                .status(SaleStatus.DRAFT)
-                .createdBy("SYSTEM") // Deve vir do contexto de segurança
-                .notes(request.getNotes())
-                .build();
-
-        // Processar itens
-        List<SaleItem> items = processItems(sale, request.getItems());
-        sale.setItems(items);
-
-        // Calcular total
-        BigDecimal total = items.stream()
-                .map(SaleItem::getTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        sale.setTotalAmount(total);
-
-        // Salvar venda
-        Sale savedSale = saleRepository.save(sale);
-
-        return convertToDTO(savedSale);
+        Sale sale = saleMapper.toEntity(request);
+        sale.setStatus(SaleStatus.DRAFT);
+        sale.setSaleDate(LocalDateTime.now());
+        sale = saleRepository.save(sale);
+        
+        // Reservar estoque
+        inventoryIntegrationService.reserveInventory(sale.getId(), orderItems);
+        
+        return saleMapper.toDto(sale);
     }
 
     @Override
     @Transactional
     public SaleDTO confirmSale(Long saleId) {
         Sale sale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
-
+            .orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
+            
         if (sale.getStatus() != SaleStatus.DRAFT) {
-            throw new ResourceNotFoundException("Only DRAFT sales can be confirmed");
+            throw new BusinessException("Sale can only be confirmed from DRAFT status");
         }
-
-        // Processar transações de inventário
-        inventorySalesIntegration.processSaleInventoryTransaction(convertToDTO(sale));
-
-        // Atualizar status
+        
+        // Processar transações de estoque
+        inventoryIntegrationService.processSaleInventoryTransaction(saleMapper.toDto(sale));
+        
+        // Gerar fatura
+        InvoiceDTO invoice = invoiceService.generateInvoice(saleId);
+        
+        // Atualizar status da venda
         sale.setStatus(SaleStatus.CONFIRMED);
-        Sale savedSale = saleRepository.save(sale);
-
-        return convertToDTO(savedSale);
+        sale = saleRepository.save(sale);
+        
+        return saleMapper.toDto(sale);
     }
 
     @Override
