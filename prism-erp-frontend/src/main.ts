@@ -1,38 +1,54 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, importProvidersFrom, inject, PLATFORM_ID } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors, HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app/app.component';
+import { environment } from './environment/environment'; // Caminho relativo corrigido
+import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
-import { environment } from './environment/environment';
-import { Observable } from 'rxjs';
 
-
-export const AuthInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    const cloned = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${token}`)
-    });
-    return next(cloned);
-  }
-  return next(req);
-};
-
+import {
+  provideHttpClient,
+  withInterceptors,
+  withFetch,
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpHandlerFn,
+  HttpEvent,
+  HttpErrorResponse,
+} from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { isPlatformBrowser } from '@angular/common';
+import { catchError, Observable, throwError } from 'rxjs';
 
 if (environment.production) {
   enableProdMode();
 }
 
-const appConfig = {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient(withInterceptors([AuthInterceptor])),
-    provideAnimations(),
-  ]
+const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
+  if (isPlatformBrowser(inject(PLATFORM_ID))) { // Injete PLATFORM_ID aqui
+    const token = localStorage.getItem('token');
+    if (token) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+  }
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        console.error('Error 401: Unauthorized');
+      }
+      return throwError(() => error);
+    })
+  );
 };
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch(err => console.error('Error bootstrapping application:', err));
+bootstrapApplication(AppComponent, { // Removido 'ApplicationConfig='
+  providers: [
+    provideRouter(routes),
+    importProvidersFrom(BrowserAnimationsModule),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+  ],
+}).catch((err) => console.error(err));
 

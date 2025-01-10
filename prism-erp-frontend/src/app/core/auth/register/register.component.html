@@ -1,127 +1,45 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
+<div class="min-h-screen flex items-center justify-center bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 p-8 bg-slate-800 rounded-lg shadow-lg">
     <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Create your account
-      </h2>
+      <img *ngIf="logoUrl" [src]="logoUrl" alt="Your Logo" class="mx-auto h-12 w-auto">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-white">Create your account</h2>
     </div>
 
-    <!-- Error Message -->
-    @if (errorMessage) {
-      <div class="rounded-md bg-red-50 p-4 mb-4">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm text-red-700">{{ errorMessage }}</p>
-          </div>
-        </div>
-      </div>
-    }
+    <div *ngIf="errorMessage" class="bg-red-500 rounded-md p-4 mb-4 text-sm text-white">
+      {{ errorMessage }}
+    </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
-      <div class="rounded-md shadow-sm -space-y-px">
-        <!-- First Name -->
-        <div>
-          <label for="firstName" class="sr-only">First Name</label>
-          <input
-            id="firstName"
-            formControlName="firstName"
-            type="text"
-            [class]="'appearance-none rounded-none relative block w-full px-3 py-2 border text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ' +
-            (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid ? 'border-red-300 placeholder-red-300' : 'border-gray-300 placeholder-gray-500')"
-            placeholder="First name"
-            (input)="resetError()"
-          />
-          @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid) {
-            <p class="mt-1 text-sm text-red-600">{{ getFieldError('firstName') }}</p>
-          }
-        </div>
-
-        <!-- Last Name -->
-        <div>
-          <label for="lastName" class="sr-only">Last Name</label>
-          <input
-            id="lastName"
-            formControlName="lastName"
-            type="text"
-            [class]="'appearance-none rounded-none relative block w-full px-3 py-2 border text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ' +
-            (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid ? 'border-red-300 placeholder-red-300' : 'border-gray-300 placeholder-gray-500')"
-            placeholder="Last name"
-            (input)="resetError()"
-          />
-          @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid) {
-            <p class="mt-1 text-sm text-red-600">{{ getFieldError('lastName') }}</p>
-          }
-        </div>
-
-        <!-- Email -->
-        <div>
-          <label for="email" class="sr-only">Email address</label>
-          <input
-            id="email"
-            formControlName="email"
-            type="email"
-            autocomplete="email"
-            [class]="'appearance-none rounded-none relative block w-full px-3 py-2 border text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ' +
-            (registerForm.get('email')?.touched && registerForm.get('email')?.invalid ? 'border-red-300 placeholder-red-300' : 'border-gray-300 placeholder-gray-500')"
-            placeholder="Email address"
-            (input)="resetError()"
-          />
-          @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
-            <p class="mt-1 text-sm text-red-600">{{ getFieldError('email') }}</p>
-          }
-        </div>
-
-        <!-- Password -->
-        <div>
-          <label for="password" class="sr-only">Password</label>
-          <input
-            id="password"
-            formControlName="password"
-            type="password"
-            autocomplete="new-password"
-            [class]="'appearance-none rounded-none relative block w-full px-3 py-2 border text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ' +
-            (registerForm.get('password')?.touched && registerForm.get('password')?.invalid ? 'border-red-300 placeholder-red-300' : 'border-gray-300 placeholder-gray-500')"
-            placeholder="Password"
-            (input)="resetError()"
-          />
-          @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
-            <p class="mt-1 text-sm text-red-600">{{ getFieldError('password') }}</p>
-          }
+      <div *ngFor="let field of formFields" class="space-y-1">
+        <label [for]="field.name" class="block text-sm font-medium text-gray-300">{{ field.label }}</label>
+        <input
+          [id]="field.name"
+          [formControlName]="field.name"
+          [type]="field.type"
+          [autocomplete]="field.autocomplete"
+          class="w-full px-3 py-2 border border-gray-600 bg-slate-700 text-white rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+          [placeholder]="field.placeholder"
+          (input)="resetError()"
+        />
+        <div *ngIf="registerForm.get(field.name)?.touched && registerForm.get(field.name)?.invalid" class="text-red-400 text-sm mt-1">
+          {{ getFieldError(field.name) }}
         </div>
       </div>
 
-      <!-- Submit Button -->
-      <div>
-        <button
-          type="submit"
-          [disabled]="registerForm.invalid || isLoading"
-          [class]="'group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ' +
-          (registerForm.invalid || isLoading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700')"
-        >
-          @if (isLoading) {
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-          }
-          {{ isLoading ? 'Creating account...' : 'Sign up' }}
-        </button>
-      </div>
+      <button
+        type="submit"
+        [disabled]="registerForm.invalid || isLoading"
+        class="w-full py-2 px-4 bg-emerald-600 text-white rounded-md font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+      >
+        <span *ngIf="isLoading" class="spinner border-r-2 border-white h-5 w-5 mr-2 animate-spin inline-block align-middle"></span>
+        {{ isLoading ? 'Creating account...' : 'Sign up' }}
+      </button>
 
-      <!-- Login Link -->
-      <div class="text-center">
-        <p class="text-sm text-gray-600">
-          Already have an account?
-          <a routerLink="/login" class="font-medium text-indigo-600 hover:text-indigo-500">
-            Sign in
-          </a>
-        </p>
-      </div>
+      <p class="text-center text-sm text-gray-400">
+        Already have an account?
+        <a routerLink="/login" class="text-emerald-500 hover:text-emerald-400 font-medium">Sign in</a>
+      </p>
     </form>
   </div>
 </div>
+

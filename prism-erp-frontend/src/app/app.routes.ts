@@ -64,78 +64,86 @@ import {ActivitySummaryComponent} from './features/dashboard/activity-summary/ac
 
 export const routes: Routes = [
 
-  // Rotas públicas (com MainLayoutComponent)
+  // Public Routes
   {
     path: '',
-    component: MainLayoutComponent,
+    component: MainLayoutComponent, // Main layout for public content
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redireciona para /home
-      { path: 'home', component: HomeComponent }, // Componente Home
+      { path: '', component: HomeComponent }, // Your home component
       { path: 'about', component: AboutComponent },
-      {path: 'services', component: ServicesComponent},
-      {path: 'benefits', component: BenefitsComponent},
-      // ... outras rotas públicas que você queira adicionar
-      { path: 'login', component: LoginComponent },
-      { path: 'forgot-password', component: ForgotPasswordComponent },
-      { path: 'register', component: RegisterComponent },
-      { path: 'reset-password', component: ResetPasswordComponent },
+      { path: 'services', component: ServicesComponent },
+      { path: 'benefits', component: BenefitsComponent },
+      // ... other public routes within MainLayout ...
     ]
   },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
 
-  // Rotas protegidas pelo AuthGuard (apenas dashboard e suas sub-rotas)
+
   {
-    path: 'dashboard',  // Remova a barra "/" antes de "dashboard"
+    path: 'dashboard', // Protected dashboard route
     component: DashboardComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard], // Requires authentication
     children: [
-      { path: '', redirectTo: 'summary', pathMatch: 'full' }, // Redireciona para /dashboard/summary
-      { path: 'summary', component: ActivitySummaryComponent },
-      // Users
-      { path: 'users', component: UserListComponent },
-      { path: 'users/create', component: UserCreateComponent },
-      { path: 'users/:id', component: UserDetailComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
-      // Products
-      { path: 'products', component: ProductListComponent },
-      { path: 'products/create', component: ProductCreateComponent },
-      { path: 'products/:id/edit', component: ProductEditComponent },
-      { path: 'products/:id', component: ProductDetailComponent },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        children: [
+          { path: '', redirectTo: 'summary', pathMatch: 'full' },
+          { path: 'summary', component: ActivitySummaryComponent },
 
-      // Customers
-      { path: 'customers', component: CustomerListComponent },
-      { path: 'customers/create', component: CustomerFormComponent },
-      { path: 'customers/:id/edit', component: CustomerFormComponent },
-      { path: 'customers/:id', component: CustomerDetailComponent },
+          // Users
+          { path: 'users', component: UserListComponent },
+          { path: 'users/create', component: UserCreateComponent },
+          { path: 'users/:id', component: UserDetailComponent },
+
+          // Products
+          { path: 'products', component: ProductListComponent },
+          { path: 'products/create', component: ProductCreateComponent },
+          { path: 'products/:id/edit', component: ProductEditComponent },
+          { path: 'products/:id', component: ProductDetailComponent },
+
+          // Customers
+          { path: 'customers', component: CustomerListComponent },
+          { path: 'customers/create', component: CustomerFormComponent },
+          { path: 'customers/:id/edit', component: CustomerFormComponent },
+          { path: 'customers/:id', component: CustomerDetailComponent },
+
+          // Finance
+          { path: 'finance/invoices', component: InvoicesComponent },
+          { path: 'finance/payments', component: PaymentsComponent },
+          { path: 'finance/reports', component: FinanceReportsComponent },
+
+          // HR
+          { path: 'hr/employees', component: EmployeesComponent },
+          { path: 'hr/departments', component: DepartmentsComponent },
 
 
-      // Finance
-      { path: 'finance/invoices', component: InvoicesComponent },
-      { path: 'finance/payments', component: PaymentsComponent },
-      { path: 'finance/reports', component: FinanceReportsComponent },
+          // Inventory (If you want these nested under dashboard; otherwise, move outside)
+          { path: 'inventory/stock-levels', component: StockLevelsComponent },
+          { path: 'inventory/transactions', component: TransactionsComponent },
+          { path: 'inventory/products', component: ProductsComponent },
 
-      // HR
-      { path: 'hr/employees', component: EmployeesComponent },
-      { path: 'hr/departments', component: DepartmentsComponent },
+          // Purchase
+          { path: 'purchase/orders', component: PurchaseOrdersComponent },
+          { path: 'purchase/suppliers', component: SuppliersComponent },
 
-      // Inventory
-      { path: 'inventory/products', component: ProductsComponent }, // Remova se já estiver listada acima
-      { path: 'inventory/stock-levels', component: StockLevelsComponent },
-      { path: 'inventory/transactions', component: TransactionsComponent },
-
-      // Purchase
-      { path: 'purchase/orders', component: PurchaseOrdersComponent },
-      { path: 'purchase/suppliers', component: SuppliersComponent },
-
-      // Reports
-      { path: 'reports/sales', component: SalesReportComponent },
-      { path: 'reports/inventory', component: InventoryReportComponent },
-      { path: 'reports/finance', component: FinanceReportComponent },
+          // Reports
+          { path: 'reports/sales', component: SalesReportComponent },
+          { path: 'reports/inventory', component: InventoryReportComponent },
+          { path: 'reports/finance', component: FinanceReportComponent },
 
       // Sales
       { path: 'sales/orders', component: SalesOrdersComponent },
       { path: 'sales/quotations', component: QuotationsComponent },
       { path: 'sales/customers', component: CustomersComponent },
 
+        ]
+      }
     ]
   },
 

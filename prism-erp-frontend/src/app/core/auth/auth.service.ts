@@ -1,10 +1,11 @@
 // core/auth/auth.service.ts
-import { Injectable } from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, of, tap, throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {AuthenticationRequest, ForgotPasswordRequest, ResetPasswordRequest} from '../models/user.model';
 import {catchError} from 'rxjs/operators';
+import {isPlatformBrowser} from '@angular/common';
 
 interface AuthResponse {
   token: string;
@@ -26,6 +27,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(null);
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private http: HttpClient,
     private router: Router
   ) {
@@ -33,12 +35,13 @@ export class AuthService {
   }
 
   private checkInitialAuth(): void {
+    if (isPlatformBrowser(this.platformId)){
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
     if (token && user) {
       this.isAuthenticatedSubject.next(true);
       this.currentUserSubject.next(JSON.parse(user));
-    }
+    }}
   }
 
 

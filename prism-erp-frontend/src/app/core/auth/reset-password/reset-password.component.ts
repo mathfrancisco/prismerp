@@ -82,4 +82,28 @@ export class ResetPasswordComponent implements OnInit {
       }
     });
   }
+
+  getFieldError(fieldName: string): string {
+    const control = this.resetForm.get(fieldName);
+
+    if (control?.touched && control?.invalid) {
+      if (control.hasError('required')) {
+        return `${this.formatFieldName(fieldName)} is required.`;
+      }
+      if (control.hasError('minlength')) {
+        const minLength = control.errors?.['minlength']?.requiredLength;
+        return `${this.formatFieldName(fieldName)} must be at least ${minLength} characters long.`;
+      }
+      if (fieldName === 'confirmPassword' && control.hasError('passwordMismatch')) {
+        return 'Passwords do not match.';
+      }
+    }
+    return '';
+  }
+
+  private formatFieldName(fieldName: string): string {
+    return fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+  }
+
+
 }

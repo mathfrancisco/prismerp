@@ -20,6 +20,14 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   isLoading = false;
   errorMessage: string | null = null;
+  logoUrl = "assets/images/your_logo.png";
+  formFields = [
+    { name: 'firstName', label: 'First Name', type: 'text', autocomplete: 'given-name', placeholder: 'First Name' },
+    { name: 'lastName', label: 'Last Name', type: 'text', autocomplete: 'family-name', placeholder: 'Last Name' },
+    { name: 'email', label: 'Email address', type: 'email', autocomplete: 'email', placeholder: 'Email address' },
+    { name: 'password', label: 'Password', type: 'password', autocomplete: 'new-password', placeholder: 'Password' },
+    // Add more fields as needed
+  ];
 
   constructor(
     private formBuilder: FormBuilder,

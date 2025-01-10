@@ -17,10 +17,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
+  returnUrl: string = '/dashboard';
   loginForm: FormGroup;
   isLoading = false;
   errorMessage: string | null = null;
-  returnUrl: string = '/';
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,14 +43,15 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     // If already authenticated, redirect to home
     this.authService.isAuthenticated().subscribe(isAuthenticated => {
       if (isAuthenticated) {
-        this.router.navigate(['/']);
+        this.router.navigate([this.returnUrl]); // Use the correct returnUrl
       }
     });
 
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
   onSubmit(): void {

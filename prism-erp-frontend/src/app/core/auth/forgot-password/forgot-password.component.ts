@@ -52,4 +52,16 @@ export class ForgotPasswordComponent {
       }
     });
   }
+  getFieldError(fieldName: string): string {
+    const control = this.forgotPasswordForm.get(fieldName);
+    if (control?.touched && control.invalid) {
+      if (control.hasError('required')) {
+        return `${fieldName} is required.`;
+      }
+      if (control.hasError('email')) {
+        return 'Please enter a valid email address.';
+      }
+    }
+    return '';
+  }
 }
