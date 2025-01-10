@@ -12,10 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -73,9 +75,27 @@ public class AuthenticationService {
     }
 
     public void forgotPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        String token = UUID.randomUUID().toString(); // Gere um token aleatório
+        user.setPasswordResetToken(token); // Salva o token no usuário
+        userRepository.save(user);
+
+        // TODO: Enviar email para o usuário com o link de redefinição de senha
+        // O link deve conter o token gerado, por exemplo: /reset-password?token={token}
+        log.info("Password reset token generated for user {}: {}", email, token);
+
     }
 
     public void resetPassword(String token, String newPassword) {
+        User user = userRepository.findByPasswordResetToken(token) // Corrigido
+                .orElseThrow(() -> new IllegalArgumentException("Invalid password reset token"));
 
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPasswordResetToken(null); // Limpa o token após o uso
+        userRepository.save(user);
+
+        log.info("Password successfully reset for user {}", user.getEmail());
     }
 }
