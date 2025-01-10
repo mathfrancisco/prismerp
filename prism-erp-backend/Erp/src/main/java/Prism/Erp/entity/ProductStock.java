@@ -5,36 +5,33 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "inventory_transactions")
+@Table(name = "product_stocks")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryTransaction {
+public class ProductStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(nullable = false)
-    private String type;
+    private Integer currentStock;
 
     @Column(nullable = false)
-    private Integer quantity;
-
-    private String reference;
-
-    private String notes;
+    private Integer minimumStock;
 
     @Column(nullable = false)
-    private LocalDateTime transactionDate;
+    private Integer maximumStock;
+
+    private String locationCode;
 
     @Column(nullable = false)
-    private String createdBy;
+    private String status;
 }

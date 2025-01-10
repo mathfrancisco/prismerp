@@ -4,9 +4,11 @@ import Prism.Erp.dto.InventoryTransactionDTO;
 import Prism.Erp.dto.ProductStockDTO;
 import Prism.Erp.entity.InventoryTransaction;
 import Prism.Erp.entity.Product;
-import Prism.Erp.model.TransactionType;
+import Prism.Erp.entity.ProductStock;
+import Prism.Erp.exception.ResourceNotFoundException;
 import Prism.Erp.repository.InventoryTransactionRepository;
 import Prism.Erp.repository.ProductRepository;
+import Prism.Erp.repository.ProductStockRepository;
 import Prism.Erp.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,96 +24,103 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
 
-    private final InventoryTransactionRepository inventoryTransactionRepository;
+    private final InventoryTransactionRepository transactionRepository;
+    private final ProductStockRepository stockRepository;
     private final ProductRepository productRepository;
-    private static final int LOW_STOCK_THRESHOLD = 10; // Configure according to your needs
 
     @Override
     @Transactional
     public InventoryTransactionDTO createTransaction(InventoryTransactionDTO transactionDTO) {
         Product product = productRepository.findById(transactionDTO.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        InventoryTransaction transaction = convertToEntity(transactionDTO);
+        ProductStock stock = stockRepository.findByProductId(transactionDTO.getProductId())
+                .orElseGet(() -> createInitialStock(product));
 
-        // Update product stock
-        updateProductStock(product, transaction);
-        productRepository.save(product);
+        // Update stock levels
+        if ("OUTBOUND".equals(transactionDTO.getType())) {
+            stock.setCurrentStock(stock.getCurrentStock() - transactionDTO.getQuantity());
+        } else {
+            stock.setCurrentStock(stock.getCurrentStock() + transactionDTO.getQuantity());
+        }
 
-        return convertToDTO(inventoryTransactionRepository.save(transaction));
+        // Create transaction record
+        InventoryTransaction transaction = InventoryTransaction.builder()
+                .product(product)
+                .type(transactionDTO.getType())
+                .quantity(transactionDTO.getQuantity())
+                .reference(transactionDTO.getReference())
+                .notes(transactionDTO.getNotes())
+                .transactionDate(LocalDateTime.now())
+                .createdBy("SYSTEM") // Should come from security context
+                .build();
+
+        stockRepository.save(stock);
+        transaction = transactionRepository.save(transaction);
+
+        return convertTransactionToDTO(transaction);
     }
 
     @Override
     public Page<ProductStockDTO> getStockLevels(Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(product -> ProductStockDTO.builder()
-                        .productId(product.getId())
-                        .productName(product.getName())
-                        .productCode(product.getCode())
-                        .currentStock(product.getCurrentStock())
-                        .minimumStock(product.getMinimumStock())
-                        .category(product.getCategory())
-                        .lowStock(product.getCurrentStock() <= product.getMinimumStock())
-                        .build());
+        return stockRepository.findAll(pageable)
+                .map(this::convertStockToDTO);
     }
 
     @Override
     public List<ProductStockDTO> getLowStockProducts() {
-        return productRepository.findByCurrentStockLessThanEqual(LOW_STOCK_THRESHOLD)
-                .stream()
-                .map(product -> ProductStockDTO.builder()
-                        .productId(product.getId())
-                        .productName(product.getName())
-                        .productCode(product.getCode())
-                        .currentStock(product.getCurrentStock())
-                        .minimumStock(product.getMinimumStock())
-                        .category(product.getCategory())
-                        .lowStock(true)
-                        .build())
+        return stockRepository.findLowStockProducts().stream()
+                .map(this::convertStockToDTO)
                 .collect(Collectors.toList());
-    }
-
-    private void updateProductStock(Product product, InventoryTransaction transaction) {
-        if (transaction.getType() == TransactionType.INBOUND) {
-            product.setCurrentStock(product.getCurrentStock() + transaction.getQuantity());
-        } else if (transaction.getType() == TransactionType.OUTBOUND) {
-            int newStock = product.getCurrentStock() - transaction.getQuantity();
-            if (newStock < 0) {
-                throw new RuntimeException("Insufficient stock for product: " + product.getName());
-            }
-            product.setCurrentStock(newStock);
-        }
-    }
-
-    private InventoryTransactionDTO convertToDTO(InventoryTransaction entity) {
-        return InventoryTransactionDTO.builder()
-                .id(entity.getId())
-                .productId(entity.getProduct().getId())
-                .productName(entity.getProduct().getName())
-                .type(entity.getType().name())
-                .quantity(entity.getQuantity())
-                .reference(entity.getReference())
-                .notes(entity.getNotes())
-                .build();
-    }
-
-    private InventoryTransaction convertToEntity(InventoryTransactionDTO dto) {
-        Product product = productRepository.findById(dto.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        return InventoryTransaction.builder()
-                .product(product)
-                .type(TransactionType.valueOf(dto.getType()))
-                .quantity(dto.getQuantity())
-                .reference(dto.getReference())
-                .notes(dto.getNotes())
-                .build();
     }
 
     @Override
     public List<InventoryTransactionDTO> getTransactionsByProductId(Long productId) {
-        return inventoryTransactionRepository.findByProductId(productId).stream()
-                .map(this::convertToDTO)
+        return transactionRepository.findByProductIdOrderByTransactionDateDesc(productId).stream()
+                .map(this::convertTransactionToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductStockDTO getProductStock(Long productId) {
+        return stockRepository.findByProductId(productId)
+                .map(this::convertStockToDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Product stock not found"));
+    }
+
+    private ProductStock createInitialStock(Product product) {
+        return ProductStock.builder()
+                .product(product)
+                .currentStock(0)
+                .minimumStock(0)
+                .maximumStock(1000)
+                .locationCode("DEFAULT")
+                .status("ACTIVE")
+                .build();
+    }
+
+    private ProductStockDTO convertStockToDTO(ProductStock stock) {
+        return ProductStockDTO.builder()
+                .productId(stock.getProduct().getId())
+                .productName(stock.getProduct().getName())
+                .currentStock(stock.getCurrentStock())
+                .minimumStock(stock.getMinimumStock())
+                .maximumStock(stock.getMaximumStock())
+                .locationCode(stock.getLocationCode())
+                .status(stock.getStatus())
+                .build();
+    }
+
+    private InventoryTransactionDTO convertTransactionToDTO(InventoryTransaction transaction) {
+        return InventoryTransactionDTO.builder()
+                .id(transaction.getId())
+                .productId(transaction.getProduct().getId())
+                .type(transaction.getType())
+                .quantity(transaction.getQuantity())
+                .reference(transaction.getReference())
+                .notes(transaction.getNotes())
+                .transactionDate(transaction.getTransactionDate())
+                .createdBy(transaction.getCreatedBy())
+                .build();
     }
 }

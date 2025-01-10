@@ -1,40 +1,42 @@
-package Prism.Erp.entity;
+package Prism.Erp.dto;
 
+import Prism.Erp.entity.Product;
+import Prism.Erp.entity.Sale;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
+
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "inventory_transactions")
+@Table(name = "sale_items")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryTransaction {
+public class SaleItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "sale_id", nullable = false)
+    private Sale sale;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(nullable = false)
-    private String type;
-
-    @Column(nullable = false)
     private Integer quantity;
 
-    private String reference;
-
-    private String notes;
+    @Column(nullable = false)
+    private BigDecimal unitPrice;
 
     @Column(nullable = false)
-    private LocalDateTime transactionDate;
+    private BigDecimal totalPrice;
 
-    @Column(nullable = false)
-    private String createdBy;
+    private BigDecimal discount;
 }

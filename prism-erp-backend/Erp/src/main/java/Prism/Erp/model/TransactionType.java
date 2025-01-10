@@ -8,5 +8,8 @@ public enum TransactionType {
     ADJUSTMENT, // Ajuste
     RETURN,     // Devolução
     TRANSFER,   // Transferência
-    WRITE_OFF   // Baixa
+    WRITE_OFF ,
+    PAYMENT,
+    REFUND,
+    CANCELLATION//
 }

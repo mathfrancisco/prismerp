@@ -10,36 +10,36 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/sales-orders")
+@RequestMapping("/api/v1/sales")
 @RequiredArgsConstructor
 public class SalesOrderController {
 
     private final SalesOrderService salesOrderService;
 
-    @PostMapping
+    @PostMapping("/orders")
     public ResponseEntity<SalesOrderDTO> createOrder(@RequestBody SalesOrderDTO orderDTO) {
         return ResponseEntity.ok(salesOrderService.createOrder(orderDTO));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/orders/{id}")
     public ResponseEntity<SalesOrderDTO> getOrder(@PathVariable Long id) {
         return ResponseEntity.ok(salesOrderService.getOrderById(id));
     }
 
-    @PutMapping("/{id}/status")
+    @PutMapping("/orders/{id}/status")
     public ResponseEntity<SalesOrderDTO> updateStatus(
             @PathVariable Long id,
             @RequestParam OrderStatus status) {
         return ResponseEntity.ok(salesOrderService.updateStatus(id, status));
     }
 
-    @GetMapping("/customer/{customerId}")
+    @GetMapping("/orders/customer/{customerId}")
     public ResponseEntity<Page<SalesOrderDTO>> getCustomerOrders(
             @PathVariable Long customerId,
             Pageable pageable) {
         return ResponseEntity.ok(salesOrderService.getCustomerOrders(customerId, pageable));
     }
-    @GetMapping("/number/{orderNumber}")
+    @GetMapping("/orders/number/{orderNumber}")
     public ResponseEntity<SalesOrderDTO> getByOrderNumber(@PathVariable String orderNumber) {
         return ResponseEntity.ok(salesOrderService.getByOrderNumber(orderNumber));
     }

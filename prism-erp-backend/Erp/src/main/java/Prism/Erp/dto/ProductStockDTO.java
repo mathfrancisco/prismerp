@@ -14,6 +14,10 @@ public class ProductStockDTO {
     private String productCode;
     private Integer currentStock;
     private Integer minimumStock;
+    private Integer maximumStock;
+
     private String category;
+    private String locationCode;
     private Boolean lowStock;
+    private String status;
 }

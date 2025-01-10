@@ -2,6 +2,8 @@ package Prism.Erp.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,4 +18,6 @@ public class InventoryTransactionDTO {
     private Integer quantity;
     private String reference;
     private String notes;
+    private LocalDateTime transactionDate;
+    private String createdBy;
 }
