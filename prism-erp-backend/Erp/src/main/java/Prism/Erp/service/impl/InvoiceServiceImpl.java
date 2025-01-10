@@ -22,12 +22,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
+@Transactional
 public class InvoiceServiceImpl implements InvoiceService {
-
+    
     private final InvoiceRepository invoiceRepository;
-    private final SalesOrderRepository salesOrderRepository;
+    private final SalesOrderService salesOrderService;
+    private final InvoiceMapper invoiceMapper;
 
     private static final BigDecimal TAX_RATE_ICMS = new BigDecimal("0.18");
     private static final BigDecimal TAX_RATE_IPI = new BigDecimal("0.05");
