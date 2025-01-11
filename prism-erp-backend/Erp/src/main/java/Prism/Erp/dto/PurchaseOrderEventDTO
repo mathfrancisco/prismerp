@@ -1,0 +1,11 @@
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PurchaseOrderEventDTO {
+    private LocalDateTime timestamp;
+    private String event;
+    private String description;
+    private String username;
+    private Map<String, Object> changes;
+}
