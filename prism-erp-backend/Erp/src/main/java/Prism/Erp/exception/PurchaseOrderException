@@ -1,0 +1,39 @@
+public class PurchaseOrderException extends BusinessException {
+    public static class OrderNotFoundException extends PurchaseOrderException {
+        public OrderNotFoundException(Long id) {
+            super(String.format("Purchase order not found with ID: %d", id),
+                  "PO_001",
+                  HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    public static class InvalidOrderStatusException extends PurchaseOrderException {
+        public InvalidOrderStatusException(String message) {
+            super(message, "PO_002", HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    public static class DuplicateOrderNumberException extends PurchaseOrderException {
+        public DuplicateOrderNumberException(String orderNumber) {
+            super(String.format("Purchase order already exists with number: %s", orderNumber),
+                  "PO_003",
+                  HttpStatus.CONFLICT);
+        }
+    }
+    
+    public static class InvalidApprovalException extends PurchaseOrderException {
+        public InvalidApprovalException(String message) {
+            super(message, "PO_004", HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    public static class PaymentException extends PurchaseOrderException {
+        public PaymentException(String message) {
+            super(message, "PO_005", HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    private PurchaseOrderException(String message, String errorCode, HttpStatus httpStatus) {
+        super(message, errorCode, httpStatus);
+    }
+}
