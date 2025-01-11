@@ -1,36 +1,80 @@
-package Prism.Erp.entity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
-
 @Entity
 @Table(name = "suppliers")
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Getter
-@Setter
-public class Supplier extends BaseEntity {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+public class Supplier implements Auditable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String documentNumber;
+
+    private String contactName;
 
     private String email;
 
     private String phone;
 
-    @Embedded
-    private RabbitConnectionDetails.Address address;
-
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Boolean active = true;
+    private SupplierStatus status;
+
+    @Column(length = 500)
+    private String address;
+
+    private String website;
+
+    @Column(length = 500)
+    private String bankDetails;
+
+    private Integer paymentTerms;
+
+    private String taxRegime;
+
+    @Column(precision = 19, scale = 4)
+    private BigDecimal creditLimit;
+
+    @Column(precision = 5, scale = 2)
+    private BigDecimal qualityRating;
+
+    @Column(precision = 5, scale = 2)
+    private BigDecimal deliveryPerformance;
+
+    private LocalDate lastEvaluationDate;
+
+    @ElementCollection
+    @CollectionTable(name = "supplier_categories")
+    private Set<String> categories = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "supplier_certifications")
+    private Set<String> certifications = new HashSet<>();
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
+    private List<SupplierDocument> documents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
+    private List<SupplierContact> contactHistory = new ArrayList<>();
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String updatedBy;
+
+    @Version
+    private Long version;
 }
