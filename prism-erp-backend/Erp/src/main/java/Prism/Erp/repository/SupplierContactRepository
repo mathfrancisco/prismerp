@@ -1,0 +1,16 @@
+@Repository
+public interface SupplierContactRepository extends JpaRepository<SupplierContact, Long> {
+    List<SupplierContact> findBySupplierId(Long supplierId);
+    
+    @Query("SELECT sc FROM SupplierContact sc WHERE sc.supplier.id = :supplierId AND sc.contactDate >= :startDate")
+    List<SupplierContact> findBySupplierIdAndDateAfter(
+        @Param("supplierId") Long supplierId, 
+        @Param("startDate") LocalDateTime startDate
+    );
+    
+    @Query("SELECT sc FROM SupplierContact sc WHERE sc.supplier.id = :supplierId ORDER BY sc.contactDate DESC")
+    Page<SupplierContact> findLatestContacts(
+        @Param("supplierId") Long supplierId, 
+        Pageable pageable
+    );
+}
