@@ -9,4 +9,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     
     @Query("SELECT s FROM Supplier s JOIN s.categories c WHERE c IN :categories")
     List<Supplier> findByCategoriesIn(@Param("categories") Set<String> categories);
+    
+    @Query("SELECT s FROM Supplier s WHERE s.lastEvaluationDate <= :date")
+    List<Supplier> findSuppliersNeedingEvaluation(@Param("date") LocalDate date);
 }
