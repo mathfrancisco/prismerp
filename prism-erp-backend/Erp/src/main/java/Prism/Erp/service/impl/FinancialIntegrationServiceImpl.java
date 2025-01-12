@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class FinancialIntegrationServiceImpl implements FinancialIntegrationService {
 
     private final AccountReceivableRepository accountReceivableRepository;
@@ -24,6 +26,9 @@ public class FinancialIntegrationServiceImpl implements FinancialIntegrationServ
     private final PaymentPlanRepository paymentPlanRepository;
     private final InvoiceRepository invoiceRepository;
     private final CustomerRepository customerRepository;
+private final AccountPayableService accountPayableService;
+    private final BudgetService budgetService;
+    private final SupplierFinancialService supplierFinancialService;
 
     @Override
     @Transactional
@@ -221,5 +226,63 @@ public class FinancialIntegrationServiceImpl implements FinancialIntegrationServ
                 .paymentMethod(entity.getPaymentMethod())
                 .bankAccount(entity.getBankAccount())
                 .build();
+    }
+
+@Override
+    @Transactional
+    public void createPayableFromPurchaseOrder(PurchaseOrderDTO purchaseOrder) {
+        try {
+            AccountPayableDTO payable = AccountPayableDTO.builder()
+                .supplierId(purchaseOrder.getSupplierId())
+                .amount(purchaseOrder.getTotalAmount())
+                .dueDate(calculateDueDate(purchaseOrder))
+                .description("PO #" + purchaseOrder.getOrderNumber())
+                .status(PaymentStatus.PENDING)
+                .paymentTerms(purchaseOrder.getPayments())
+                .reference(purchaseOrder.getOrderNumber())
+                .build();
+                
+            accountPayableService.createAccountPayable(payable);
+            
+            log.info("Created account payable for PO #{}", purchaseOrder.getOrderNumber());
+        } catch (Exception e) {
+            log.error("Failed to create account payable for PO #{}: {}", 
+                      purchaseOrder.getOrderNumber(), e.getMessage());
+            throw new IntegrationException("Failed to create account payable", e);
+        }
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public boolean checkBudgetAvailability(String costCenter, BigDecimal amount) {
+        try {
+            BudgetCheckDTO budgetCheck = budgetService.checkAvailability(costCenter, amount);
+            return budgetCheck.isAvailable();
+        } catch (Exception e) {
+            log.error("Failed to check budget availability: {}", e.getMessage());
+            throw new IntegrationException("Failed to check budget", e);
+        }
+    }
+    
+    @Override
+    @Transactional
+    public void updatePayableStatus(Long purchaseOrderId, PaymentStatus status) {
+        try {
+            accountPayableService.updateStatusByReference(
+                purchaseOrderId.toString(), 
+                status
+            );
+            log.info("Updated payable status for PO #{} to {}", purchaseOrderId, status);
+        } catch (Exception e) {
+            log.error("Failed to update payable status for PO #{}: {}", 
+                      purchaseOrderId, e.getMessage());
+            throw new IntegrationException("Failed to update payable status", e);
+        }
+    }
+    
+    private LocalDate calculateDueDate(PurchaseOrderDTO purchaseOrder) {
+        // Implementation based on payment terms and business rules
+        return purchaseOrder.getExpectedDeliveryDate()
+            .plusDays(purchaseOrder.getSupplier().getPaymentTerms());
     }
 }
