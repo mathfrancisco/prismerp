@@ -1,0 +1,12 @@
+package Prism.Erp.model;
+
+public enum NotificationType {
+    APPROVAL_REQUIRED,
+    ORDER_DELAYED,
+    CREDIT_LIMIT_WARNING,
+    DOCUMENT_EXPIRING,
+    PAYMENT_DUE,
+    ORDER_STATUS_CHANGE,
+    SUPPLIER_STATUS_CHANGE,
+    EVALUATION_REMINDER
+}

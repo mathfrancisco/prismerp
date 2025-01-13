@@ -1,0 +1,23 @@
+package Prism.Erp.repository.business.purchase;
+
+import Prism.Erp.model.business.PaymentStatus;
+import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Repository
+public interface PurchaseOrderPaymentRepository extends JpaRepository<PurchaseOrderPayment, Long> {
+    List<PurchaseOrderPayment> findByPurchaseOrderId(Long purchaseOrderId);
+    
+    @Query("SELECT pop FROM PurchaseOrderPayment pop WHERE pop.status = :status AND pop.dueDate <= :date")
+    List<PurchaseOrderPayment> findOverduePayments(
+        @Param("status") PaymentStatus status,
+        @Param("date") LocalDate date
+    );
+    
+    @Query("SELECT SUM(pop.amount) FROM PurchaseOrderPayment pop WHERE pop.purchaseOrder.id = :purchaseOrderId AND pop.status = 'PAID'")
+    BigDecimal getTotalPaidAmount(@Param("purchaseOrderId") Long purchaseOrderId);
+}

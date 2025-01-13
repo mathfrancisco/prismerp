@@ -1,7 +1,0 @@
-@Repository
-public interface PurchaseOrderHistoryRepository extends JpaRepository<PurchaseOrderHistory, Long> {
-    Optional<PurchaseOrderHistory> findByPurchaseOrderId(Long purchaseOrderId);
-    
-    @Query("SELECT poh FROM PurchaseOrderHistory poh JOIN FETCH poh.events WHERE poh.purchaseOrder.id = :purchaseOrderId")
-    Optional<PurchaseOrderHistory> findByPurchaseOrderIdWithEvents(@Param("purchaseOrderId") Long purchaseOrderId);
-}

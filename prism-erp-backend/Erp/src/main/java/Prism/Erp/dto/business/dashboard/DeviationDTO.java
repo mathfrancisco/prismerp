@@ -1,4 +1,4 @@
-package Prism.Erp.dto;
+package Prism.Erp.dto.business.dashboard;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class KpiDTO {
-    private String name;
+public class DeviationDTO {
+    private String type;
     private String description;
-    private Object value;
-    private Object target;
-    private String unit;
+    private BigDecimal expectedValue;
+    private BigDecimal actualValue;
+    private BigDecimal deviation;
+    private String impact;
+    private LocalDateTime detectedAt;
     private String status;
-    private BigDecimal trend;
-    private LocalDateTime lastUpdate;
 }
