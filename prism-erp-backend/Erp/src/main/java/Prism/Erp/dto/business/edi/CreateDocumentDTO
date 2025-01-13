@@ -1,0 +1,21 @@
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateDocumentDTO {
+    @NotBlank
+    private String title;
+    
+    @NotNull
+    private DocumentType type;
+    
+    @NotBlank
+    private String content;
+    
+    private LocalDateTime expiresAt;
+    
+    @NotEmpty
+    private List<String> requiredSigners;
+    
+    private boolean notifySigners;
+}
