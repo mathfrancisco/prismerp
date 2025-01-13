@@ -1,0 +1,14 @@
+package Prism.Erp.model.business;
+
+public enum MovementType {
+    PURCHASE_RECEIPT,
+    SALE_SHIPMENT,
+    INVENTORY_ADJUSTMENT,
+    RETURN_FROM_CUSTOMER,
+    RETURN_TO_SUPPLIER,
+    INTERNAL_TRANSFER,
+    QUALITY_HOLD,
+    QUALITY_RELEASE,
+    DAMAGED,
+    EXPIRED
+}
