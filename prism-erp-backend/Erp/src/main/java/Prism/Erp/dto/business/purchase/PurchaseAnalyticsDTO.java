@@ -1,7 +1,7 @@
 package Prism.Erp.dto.business.purchase;
 
 import Prism.Erp.dto.business.dashboard.DeviationDTO;
-import Prism.Erp.dto.KpiDTO;
+import Prism.Erp.dto.business.dashboard.KpiDTO;
 import Prism.Erp.model.business.PurchaseOrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

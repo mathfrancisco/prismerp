@@ -4,6 +4,7 @@ import Prism.Erp.dto.business.purchase.PurchaseOrderApprovalDTO;
 import Prism.Erp.dto.business.purchase.PurchaseOrderAttachmentDTO;
 import Prism.Erp.dto.business.purchase.PurchaseOrderDTO;
 import Prism.Erp.dto.business.purchase.PurchaseOrderPaymentDTO;
+import Prism.Erp.model.business.AuditAction;
 import Prism.Erp.model.business.PurchaseOrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PurchaseOrderService {
+    @Auditable(
+            entity = "PurchaseOrder",
+            action = AuditAction.CREATE,
+            description = "Create new purchase order"
+    )
     PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO purchaseOrderDTO);
     PurchaseOrderDTO findById(Long id);
     Page<PurchaseOrderDTO> findAll(Pageable pageable);

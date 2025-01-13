@@ -1,6 +1,5 @@
 package Prism.Erp.dto.business.dashboard;
 
-import Prism.Erp.dto.KpiDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

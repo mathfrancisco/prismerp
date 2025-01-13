@@ -1,4 +1,4 @@
-package Prism.Erp.dto;
+package Prism.Erp.dto.business.dashboard;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
