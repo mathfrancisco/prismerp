@@ -1,6 +1,7 @@
 package Prism.Erp.service.impl;
 
 import Prism.Erp.dto.*;
+import Prism.Erp.dto.financial.FinancialTransactionDTO;
 import Prism.Erp.service.SalesFinancialIntegrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

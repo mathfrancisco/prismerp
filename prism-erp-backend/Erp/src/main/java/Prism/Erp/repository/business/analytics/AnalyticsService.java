@@ -1,5 +1,6 @@
 package Prism.Erp.repository.business.analytics;
 
+import Prism.Erp.dto.business.analytics.AnalyticsReportDTO;
 import Prism.Erp.entity.business.analytics.AnalyticsReport;
 import Prism.Erp.model.business.ReportType;
 import Prism.Erp.repository.business.purchase.PurchaseOrderRepository;

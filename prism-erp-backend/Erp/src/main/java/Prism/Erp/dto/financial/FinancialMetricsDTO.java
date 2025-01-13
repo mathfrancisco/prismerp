@@ -1,3 +1,5 @@
+package Prism.Erp.dto.financial;
+
 @Data
 @Builder
 public class FinancialMetricsDTO {

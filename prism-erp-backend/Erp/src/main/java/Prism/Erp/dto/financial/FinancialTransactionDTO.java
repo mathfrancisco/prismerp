@@ -1,4 +1,4 @@
-package Prism.Erp.dto;
+package Prism.Erp.dto.financial;
 
 import lombok.Builder;
 import lombok.Data;

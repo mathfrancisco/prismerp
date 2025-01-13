@@ -1,3 +1,5 @@
+package Prism.Erp.service.financial;
+
 public interface AccountPayableService {
     AccountPayableDTO createPayable(AccountPayableDTO payableDTO);
     void processPayment(Long payableId, PaymentDTO payment);

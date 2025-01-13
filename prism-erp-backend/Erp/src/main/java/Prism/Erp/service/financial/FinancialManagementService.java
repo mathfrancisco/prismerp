@@ -1,4 +1,4 @@
-package Prism.Erp.service;
+package Prism.Erp.service.financial;
 
 // Serviço de Gestão Financeira
 public interface FinancialManagementService {

@@ -1,3 +1,5 @@
+package Prism.Erp.service.financial;
+
 public interface CostCenterService {
     CostCenterDTO createCostCenter(CostCenterDTO costCenterDTO);
     void allocateExpense(Long costCenterId, ExpenseAllocationDTO allocation);

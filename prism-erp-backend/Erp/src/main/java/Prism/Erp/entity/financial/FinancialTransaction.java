@@ -1,5 +1,7 @@
-package Prism.Erp.entity;
+package Prism.Erp.entity.financial;
 
+import Prism.Erp.entity.AccountReceivable;
+import Prism.Erp.entity.BaseEntity;
 import Prism.Erp.model.TransactionType;
 import jakarta.persistence.*;
 import lombok.Data;

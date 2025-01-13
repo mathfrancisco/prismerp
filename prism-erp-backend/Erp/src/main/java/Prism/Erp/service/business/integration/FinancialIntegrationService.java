@@ -3,6 +3,8 @@ package Prism.Erp.service.business.integration;
 import Prism.Erp.dto.*;
 import Prism.Erp.dto.business.purchase.PurchaseOrderDTO;
 import Prism.Erp.dto.business.supplier.SupplierDTO;
+import Prism.Erp.dto.financial.FinancialSummaryDTO;
+import Prism.Erp.dto.financial.FinancialTransactionDTO;
 import Prism.Erp.model.business.PaymentStatus;
 
 import java.math.BigDecimal;

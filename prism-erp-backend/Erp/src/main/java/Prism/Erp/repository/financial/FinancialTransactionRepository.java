@@ -1,6 +1,6 @@
-package Prism.Erp.repository;
+package Prism.Erp.repository.financial;
 
-import Prism.Erp.entity.FinancialTransaction;
+import Prism.Erp.entity.financial.FinancialTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
