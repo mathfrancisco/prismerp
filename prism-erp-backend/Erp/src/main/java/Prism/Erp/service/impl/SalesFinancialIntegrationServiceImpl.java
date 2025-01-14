@@ -3,6 +3,7 @@ package Prism.Erp.service.impl;
 import Prism.Erp.dto.*;
 import Prism.Erp.dto.financial.FinancialTransactionDTO;
 import Prism.Erp.exception.BusinessException;
+import Prism.Erp.model.PaymentFrequency;
 import Prism.Erp.service.InvoiceService;
 import Prism.Erp.service.NotificationService;
 import Prism.Erp.service.SaleService;

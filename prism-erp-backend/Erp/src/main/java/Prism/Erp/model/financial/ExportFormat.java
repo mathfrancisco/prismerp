@@ -1,4 +1,7 @@
 package Prism.Erp.model.financial;
 
-public class ExportFormat {
+public enum ExportFormat {
+    PDF,
+    EXCEL,
+    CSV
 }
