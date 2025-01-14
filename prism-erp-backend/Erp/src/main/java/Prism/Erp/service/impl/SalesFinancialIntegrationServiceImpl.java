@@ -2,10 +2,20 @@ package Prism.Erp.service.impl;
 
 import Prism.Erp.dto.*;
 import Prism.Erp.dto.financial.FinancialTransactionDTO;
+import Prism.Erp.exception.BusinessException;
+import Prism.Erp.service.InvoiceService;
+import Prism.Erp.service.NotificationService;
+import Prism.Erp.service.SaleService;
 import Prism.Erp.service.SalesFinancialIntegrationService;
+import Prism.Erp.service.business.integration.FinancialIntegrationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.boot.beanvalidation.IntegrationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
