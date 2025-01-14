@@ -2,6 +2,7 @@ package Prism.Erp.service.business.integration;
 
 import Prism.Erp.dto.*;
 import Prism.Erp.dto.business.purchase.PurchaseOrderDTO;
+import Prism.Erp.dto.financial.AccountPayableDTO;
 import Prism.Erp.dto.financial.FinancialSummaryDTO;
 import Prism.Erp.dto.financial.FinancialTransactionDTO;
 import Prism.Erp.entity.*;
@@ -11,8 +12,10 @@ import Prism.Erp.model.*;
 import Prism.Erp.model.business.PaymentStatus;
 import Prism.Erp.repository.*;
 import Prism.Erp.repository.financial.FinancialTransactionRepository;
+import Prism.Erp.service.financial.AccountPayableService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.boot.beanvalidation.IntegrationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
