@@ -10,6 +10,7 @@ import Prism.Erp.exception.BusinessException;
 import Prism.Erp.exception.ResourceNotFoundException;
 import Prism.Erp.model.financial.ApprovalStatus;
 import Prism.Erp.model.financial.PaymentStatus;
+import Prism.Erp.repository.financial.PaymentApprovalRepository;
 import Prism.Erp.service.NotificationService;
 import Prism.Erp.service.UserService;
 import jakarta.transaction.Transactional;
